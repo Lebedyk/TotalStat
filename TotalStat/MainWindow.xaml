@@ -1,0 +1,41 @@
+﻿<Window x:Class="TotalStat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TotalStat"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="300" Width="300">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:WindowCommands.Click_OpenApp" Executed="OpenApp_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Click_OpenRedactor" Executed="OpenRedactor_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Exit" Executed="Exit_Execute"/>
+    </Window.CommandBindings>
+    
+    <Grid>       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height ="*"/>
+            <RowDefinition Height ="*"/>
+        </Grid.RowDefinitions>
+        
+        <Menu Height="20" VerticalAlignment="Top">
+            <MenuItem>
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Height="10" Width="10" Fill="Black" Margin="0 0 5 0" />
+                        <TextBlock>File</TextBlock>
+                    </StackPanel>                    
+                </MenuItem.Header>
+                <MenuItem Header="Open File"/>
+                <MenuItem Header="Exit" Command="local:WindowCommands.Exit"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                
+            </MenuItem>            
+        </Menu>
+        
+        <Button x:Name="LoadApp" Width="200" Height="80" Content="Начать работу" Grid.Row="1" Command="local:WindowCommands.Click_OpenApp"/>
+        <Button x:Name="LoadRedactor" Width="200" Height="80" Content="Редактировать базу" Grid.Row="2" Command="local:WindowCommands.Click_OpenRedactor"/>
+    </Grid>     
+</Window>
