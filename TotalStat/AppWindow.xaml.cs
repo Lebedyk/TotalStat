@@ -22,6 +22,11 @@ namespace TotalStat
         public AppWindow()
         {
             InitializeComponent();
+            this.Closed += AppWindow_Closed;
+        }
+        private void AppWindow_Closed(object sender, EventArgs e)
+        {
+            App.Current.MainWindow.Visibility = Visibility.Visible;
         }
     }
 }

@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
-        Title="AppWindow" Height="450" Width="800">
+        Title="AppWindow" Height="1000" Width="200">
+    <Window.CommandBindings>
+        
+    </Window.CommandBindings>
     <Grid>
         
     </Grid>

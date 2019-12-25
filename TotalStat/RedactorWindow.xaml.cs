@@ -21,7 +21,13 @@ namespace TotalStat
     {
         public RedactorWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            this.Closed += RedactorWindow_Closed;
         }
+        private void RedactorWindow_Closed(object sender, EventArgs e)
+        {
+            App.Current.MainWindow.Visibility = Visibility.Visible;
+        }
+
     }
 }

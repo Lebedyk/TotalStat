@@ -11,13 +11,11 @@ namespace TotalStat
     {
         static WindowCommands()
         {
-            Click_OpenApp = new RoutedCommand("Click_OpenApp", typeof(MainWindow));
-            Click_OpenRedactor = new RoutedCommand("Click_OpenRedactor", typeof(MainWindow));
+            OpenWindow = new RoutedCommand("OpenWindow", typeof(MainWindow));           
             Exit = new RoutedCommand("Exit", typeof(MainWindow));
         }
 
-        public static RoutedCommand Click_OpenApp { get; set; }
-        public static RoutedCommand Click_OpenRedactor { get; set; }
+        public static RoutedCommand OpenWindow { get; set; }       
         public static RoutedCommand Exit { get; set; }
         
     }

@@ -5,8 +5,109 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
-        Title="RedactorWindow" Height="450" Width="800">
+        Title="RedactorWindow" Height="400" Width="400">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.015*"/>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.015*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="3" Background="Black"/>
+        <Grid Grid.Row="4" Grid.ColumnSpan="3" Background="Black"/>
+
+        <TextBlock Margin="5" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Center"> ОБНОВЛЕНИЕ ДАТЫ</TextBlock>
+
+        <Grid Grid.Column="0" Grid.Row="1"  ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="0.25*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Column="0" BorderBrush="Black" Header="Файлы" Margin="2,3,3,3" >
+
+
+            </GroupBox>
+            <Grid Grid.Row="2"  ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SelectAll" Content="Выбрать все" Grid.Row="0" />
+                <Button x:Name="UnselectAll" Content="Отменить" Grid.Row="1" />
+            </Grid>
+        </Grid>
+
+
+
+        <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*" />
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="99*"/>
+                <RowDefinition Height="91*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Margin="35,0,35.4,2.8" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="16" Width="96">
+                <TextBlock.Text>Выберите файлы:</TextBlock.Text>
+            </TextBlock>
+            <TextBox HorizontalAlignment="Stretch" Height="20"  VerticalAlignment ="Top" Margin="5,0.2,1,0" Grid.Row="1" Grid.ColumnSpan="3">
+                <TextBox.Text>ffdsf</TextBox.Text>
+            </TextBox>
+            <Button Height="20" Width="25" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Top" Content="..." Margin="0,0.2,0,0"/>
+            <Button Grid.Row="2"  Grid.Column="0" MinHeight="55" MinWidth="70" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                    Content="Обновить" FontWeight="Bold" Margin="4,10,5,10"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Последнее обновление:" TextWrapping="Wrap" Margin="2,5,0,5"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       Text="ТУТ БУДЕТ ДАТА" Height="16"/>
+
+            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="15,23.8,20.2,24.4" Height="43" HorizontalAlignment="Center">
+                <TextBlock TextAlignment="Center">Удалить день:</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>День</TextBlock>
+                    <TextBox MaxHeight="20" Width="23" Margin="3" />
+                    <TextBlock>Месяц</TextBlock>
+                    <TextBox MaxHeight="20" Width="23" Margin="3" />
+                    <TextBlock>Год</TextBlock>
+                    <TextBox MaxHeight="20" Width="40" Margin="3"/>
+                    <Button Content="Удалить" MaxHeight="20" Margin="8,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+            <TextBlock HorizontalAlignment="Center">РЕПОРТЫ</TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBox MinWidth="200" HorizontalAlignment="Right" Margin="30, 0,0,0"/>
+                <Button Content="..." MinWidth="20" HorizontalAlignment="Left"/>
+                <Button MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+            <TextBlock HorizontalAlignment="Center">ДИВИДЕНДЫ</TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBox MinWidth="200" HorizontalAlignment="Right" Margin="30, 0,0,0"/>
+                <Button Content="..." MinWidth="20" HorizontalAlignment="Left"/>
+                <Button MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"/>
+            </StackPanel>
+        </StackPanel>
+
+
     </Grid>
 </Window>

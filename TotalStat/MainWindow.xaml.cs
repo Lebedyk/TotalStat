@@ -23,19 +23,24 @@ namespace TotalStat
         public MainWindow()
         {
             InitializeComponent();
-        }
-        private void OpenApp_Execute(object sender, ExecutedRoutedEventArgs e)
+            
+        } 
+        private void OpenWindow_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            AppWindow appwindow = new AppWindow();
-            appwindow.Show();
-            this.Hide();
-        }
-        private void OpenRedactor_Execute(object sender, ExecutedRoutedEventArgs e)
-        {
-            RedactorWindow redactorwindow = new RedactorWindow();
-            redactorwindow.Owner = this;
-            redactorwindow.Show();
-            this.IsEnabled = false;
+            if(e.OriginalSource == LoadApp)
+            {
+                AppWindow appwindow = new AppWindow();
+                appwindow.Owner = this;
+                appwindow.Show();
+                this.Visibility = Visibility.Collapsed;
+            }
+            if(e.OriginalSource == LoadRedactor)
+            {
+                RedactorWindow redactorwindow = new RedactorWindow();
+                redactorwindow.Owner = this;
+                redactorwindow.Show();
+                this.Visibility = Visibility.Collapsed;
+            }            
         }
         private void Exit_Execute(object sender, ExecutedRoutedEventArgs e)
         {

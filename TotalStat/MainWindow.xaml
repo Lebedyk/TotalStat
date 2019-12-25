@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="300" Width="300">
     <Window.CommandBindings>
-        <CommandBinding Command="local:WindowCommands.Click_OpenApp" Executed="OpenApp_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Click_OpenRedactor" Executed="OpenRedactor_Execute"/>
+        <CommandBinding Command="local:WindowCommands.OpenWindow" Executed="OpenWindow_Execute"/>
         <CommandBinding Command="local:WindowCommands.Exit" Executed="Exit_Execute"/>
     </Window.CommandBindings>
     
@@ -34,8 +33,8 @@
                 
             </MenuItem>            
         </Menu>
-        
-        <Button x:Name="LoadApp" Width="200" Height="80" Content="Начать работу" Grid.Row="1" Command="local:WindowCommands.Click_OpenApp"/>
-        <Button x:Name="LoadRedactor" Width="200" Height="80" Content="Редактировать базу" Grid.Row="2" Command="local:WindowCommands.Click_OpenRedactor"/>
+
+        <Button x:Name="LoadApp" Width="200" Height="80" Content="Начать работу" Grid.Row="1" Command="local:WindowCommands.OpenWindow"/>
+        <Button x:Name="LoadRedactor" Width="200" Height="80" Content="Редактировать базу" Grid.Row="2" Command="local:WindowCommands.OpenWindow"/>
     </Grid>     
 </Window>
