@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TotalStat
 {
-    class Screen
+    public class Screen
     {
         public string Ticker { get; set; }
         public double Open { get; set; }
