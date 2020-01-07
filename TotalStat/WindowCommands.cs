@@ -13,18 +13,38 @@ namespace TotalStat
         {
             OpenWindow = new RoutedCommand("OpenWindow", typeof(MainWindow));           
             Exit = new RoutedCommand("Exit", typeof(MainWindow));
-            FileDialog = new RoutedCommand("FileDialog", typeof(RedactorWindow));
-            Remove = new RoutedCommand("Remove", typeof(RedactorWindow));
-            Refresh = new RoutedCommand("Refresh", typeof(RedactorWindow));
-            DeleteDate = new RoutedCommand("DeleteDate", typeof(RedactorWindow));
+            Data_FileDialog = new RoutedCommand("Data_FileDialog", typeof(RedactorWindow));
+            Finviz_FileDialog = new RoutedCommand("Finviz_FileDialog", typeof(RedactorWindow));
+            About_FileDialog = new RoutedCommand("About_FileDialog", typeof(RedactorWindow));
+            Report_FileDialog = new RoutedCommand("Report_FileDialog", typeof(RedactorWindow));
+            Dividend_FileDialog = new RoutedCommand("Dividend_FileDialog", typeof(RedactorWindow));
+            Data_Remove = new RoutedCommand("Data_Remove", typeof(RedactorWindow));
+            Data_Refresh = new RoutedCommand("Data_Refresh", typeof(RedactorWindow));
+            Finviz_Refresh = new RoutedCommand("Finviz_Refresh", typeof(RedactorWindow));
+            About_Refresh = new RoutedCommand("About_Refresh", typeof(RedactorWindow));
+            Report_Refresh = new RoutedCommand("Report_Refresh", typeof(RedactorWindow));
+            Dividend_Refresh = new RoutedCommand("Dividend_Refresh", typeof(RedactorWindow));
+            Data_DeleteDate = new RoutedCommand("Data_DeleteDate", typeof(RedactorWindow));
+            Report_DeleteDate = new RoutedCommand("Report_DeleteDate", typeof(RedactorWindow));
+            Dividend_DeleteDate = new RoutedCommand("Dividend_DeleteDate", typeof(RedactorWindow));
         }
 
         public static RoutedCommand OpenWindow { get; set; }       
         public static RoutedCommand Exit { get; set; }
-        public static RoutedCommand FileDialog { get; set; }
-        public static RoutedCommand Remove { get; set; }
-        public static RoutedCommand Refresh { get; set; }        
-        public static RoutedCommand DeleteDate { get; set; }
+        public static RoutedCommand Data_FileDialog { get; set; }
+        public static RoutedCommand Finviz_FileDialog { get; set; }
+        public static RoutedCommand About_FileDialog { get; set; }
+        public static RoutedCommand Report_FileDialog { get; set; }
+        public static RoutedCommand Dividend_FileDialog { get; set; }
+        public static RoutedCommand Data_Remove { get; set; }
+        public static RoutedCommand Data_Refresh { get; set; }
+        public static RoutedCommand Finviz_Refresh { get; set; }
+        public static RoutedCommand About_Refresh { get; set; }
+        public static RoutedCommand Report_Refresh { get; set; }
+        public static RoutedCommand Dividend_Refresh { get; set; }
+        public static RoutedCommand Data_DeleteDate { get; set; }        
+        public static RoutedCommand Report_DeleteDate { get; set; }
+        public static RoutedCommand Dividend_DeleteDate { get; set; }
 
     }
 }

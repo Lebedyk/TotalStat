@@ -83,13 +83,19 @@
     <Compile Include="AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Business.cs" />
+    <Compile Include="BusinessContext.cs" />
+    <Compile Include="DescriptionContext.cs" />
     <Compile Include="Dividend.cs" />
     <Compile Include="DividendContext.cs" />
     <Compile Include="FileDialogSelect.cs" />
     <Compile Include="RedactorWindow.xaml.cs">
       <DependentUpon>RedactorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Report.cs" />
+    <Compile Include="ReportContext.cs" />
     <Compile Include="Screen.cs" />
+    <Compile Include="ScreenContext.cs" />
     <Compile Include="WindowCommands.cs" />
     <Page Include="AppWindow.xaml">
       <SubType>Designer</SubType>

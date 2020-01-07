@@ -16,5 +16,6 @@ namespace TotalStat
         public double MarketCap { get; set; }
         public double ShortFloat { get; set; }
         public double AvarageVolume { get; set; }
+        public int Id { get; set; }
     }
 }

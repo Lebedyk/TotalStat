@@ -17,5 +17,6 @@ namespace TotalStat
         public int ImbEx { get; set; }
         public int PremVolume { get; set; }
         public DateTime Date { get; set; }
+        public int Id { get; set; }
     }
 }

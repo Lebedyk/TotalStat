@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace TotalStat
 {
-    class DividendContext : DbContext
+    public class ScreenContext : DbContext
     {
-        public DividendContext() : base("DefaultConnection")
+        public ScreenContext() : base("DefaultConnection")
         { }
-        public DbSet<Dividend> Dividends { get; set; }
+        public DbSet<Screen> Screens { get; set; }
     }
 }
