@@ -5,11 +5,148 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
-        Title="AppWindow" Height="1000" Width="200">
+        Title="AppWindow" Height="400" Width="400">
     <Window.CommandBindings>
         
     </Window.CommandBindings>
     <Grid>
-        
-    </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.13*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>                
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>     
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                <TextBlock >Ticker</TextBlock>
+                       
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <TextBlock >Companyname</TextBlock>                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                <TextBlock >Industry</TextBlock>                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
+                <TextBlock >Sector</TextBlock>               
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                <TextBlock >MCap</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                <TextBlock >Country</TextBlock>                
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+                <TextBlock >SFloat</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
+                <TextBlock >AvgVol</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.8*"/>                
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                <TextBlock >Beta</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <TextBlock >Correlation</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                <TextBlock >HvBeta</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                <TextBlock >AvgPremVolume</TextBlock>
+                <TextBlock>***Sum</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
+                <Button MinHeight="15" MinWidth="35" Margin="7"/>
+                <Button MinHeight="15" MinWidth="35" Margin="7"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.8*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <TextBox MinWidth="60" Margin="5">
+                    
+                </TextBox>
+                <TextBox MinWidth="60" Margin="5">
+
+                </TextBox>
+                <TextBox MinWidth="60" Margin="5">
+
+                </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
+                <TextBlock MinHeight="10" MinWidth="35" Margin="5">
+                    REP
+                </TextBlock>
+                <TextBlock MinHeight="10" MinWidth="35" Margin="5">
+                    DIV
+
+                </TextBlock>
+            </StackPanel>
+        </Grid>        
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.8*"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0" Grid.ColumnSpan="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date"/>
+                    <DataGridTextColumn Header="Ticker1"/>
+                    <DataGridTextColumn Header="Ticker2"/>
+                    <DataGridTextColumn Header="Delta"/>
+                    <DataGridTextColumn Header="PremVol"/>                                      
+                </DataGrid.Columns>                
+            </DataGrid>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Sector1"></TextBlock>
+                <StackPanel>
+                    
+                </StackPanel>
+                <TextBlock Text="Sector2"></TextBlock>
+                <StackPanel>
+
+                </StackPanel>
+                <TextBlock Text="Sector3"></TextBlock>
+                <StackPanel>
+
+                </StackPanel>
+            </StackPanel>
+            
+        </Grid>
+
+
+        </Grid>
 </Window>

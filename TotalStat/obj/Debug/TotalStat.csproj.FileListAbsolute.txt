@@ -21,4 +21,3 @@ D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\RedactorWindow.g.cs
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\RedactorWindow.baml
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\AppWindow.g.cs
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\AppWindow.baml
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\GeneratedInternalTypeHelper.g.cs

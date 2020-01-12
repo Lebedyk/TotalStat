@@ -5,21 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
-        Title="RedactorWindow" Height="400" Width="400">
+        Title="RedactorWindow" Height="500" Width="400">
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.Data_FileDialog" Executed="Data_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Finviz_FileDialog" Executed="Finviz_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.About_FileDialog" Executed="About_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Report_FileDialog" Executed="Report_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Dividend_FileDialog" Executed="Dividend_FileDialog_Execute"/>
         <CommandBinding Command="local:WindowCommands.Data_Remove" Executed="Data_Remove_Execute"/>
         <CommandBinding Command="local:WindowCommands.Data_Refresh" Executed="Data_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Finviz_Refresh" Executed="Finviz_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.About_Refresh" Executed="About_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Report_Refresh" Executed="Report_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Dividend_Refresh" Executed="Dividend_Refresh_Execute"/>
         <CommandBinding Command="local:WindowCommands.Data_DeleteDate" Executed="Data_DeleteDate_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Data_AddData" Executed="Data_AddData_Execute"/>
+
+        <CommandBinding Command="local:WindowCommands.Finviz_FileDialog" Executed="Finviz_FileDialog_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Finviz_Refresh" Executed="Finviz_Refresh_Execute"/>
+        
+        <CommandBinding Command="local:WindowCommands.About_FileDialog" Executed="About_FileDialog_Execute"/>
+        <CommandBinding Command="local:WindowCommands.About_Refresh" Executed="About_Refresh_Execute"/>
+        
+        <CommandBinding Command="local:WindowCommands.Report_FileDialog" Executed="Report_FileDialog_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Report_Refresh" Executed="Report_Refresh_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Report_AddReport" Executed="Report_AddReport_Execute"/>
         <CommandBinding Command="local:WindowCommands.Report_DeleteDate" Executed="Report_DeleteDate_Execute"/>
+        
+        <CommandBinding Command="local:WindowCommands.Dividend_FileDialog" Executed="Dividend_FileDialog_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Dividend_Refresh" Executed="Dividend_Refresh_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Dividend_AddDiv" Executed="Dividend_AddDiv_Execute"/>
         <CommandBinding Command="local:WindowCommands.Dividend_DeleteDate" Executed="Dividend_DeleteDate_Execute"/>
     </Window.CommandBindings>
 
@@ -35,20 +42,21 @@
                 <Grid Margin="3,5,3,3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="0.55*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition Width="0.8*"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0" Grid.Row="1"  ShowGridLines="True">
+                    <Grid Grid.Column="0" Grid.Row="0"  ShowGridLines="True">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
-                            <RowDefinition Height="0.25*"/>
+                            <RowDefinition Height="0.3*"/>
                         </Grid.RowDefinitions>
                         <GroupBox Grid.Column="0" BorderBrush="Black" Header="Файлы" Margin="2,3,3,3">
-                            <ListBox x:Name="SelectedItems_ListBox">
+                            <ListBox x:Name="SelectedItems_ListBox" ItemsSource="{Binding Path = ChoosenFiles}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Name}"/>
@@ -57,7 +65,7 @@
                             </ListBox>
                         </GroupBox>
 
-                        <Grid Grid.Row="1"  ShowGridLines="True" Height="48" Margin="0,0.4,0.4,0" VerticalAlignment="Top">
+                        <Grid Grid.Row="1"  ShowGridLines="True" Height="48" Margin="2" VerticalAlignment="Top">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -83,16 +91,19 @@
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        
 
-                        <Button x:Name="DataRefreshButton" Grid.Row="2"  Grid.Column="0" MinHeight="55" MinWidth="70" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="15" Margin="1" FontWeight="Bold">
+                            Обновление DATA из файлов</TextBlock>
+
+
+                        <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" MinHeight="65" MinWidth="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
                     Content="Обновить" FontWeight="Bold" Margin="4,10,5,10" Command="local:WindowCommands.Data_Refresh"/>
-                        <TextBlock Grid.Row="2" Grid.Column="1" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" 
                        Text="Последнее обновление:" TextWrapping="Wrap" Margin="2,5,0,5"/>
-                        <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Text="ТУТ БУДЕТ ДАТА" Height="16"/>
+                        <TextBlock x:Name="DataLastRefreshTextBlock" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       Height="16" Margin="5" Text="{Binding lastUPDATE}" />
 
-                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="15,23.8,20.2,24.4" Height="43" HorizontalAlignment="Center">
+                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="15,20,10,15" Height="43" HorizontalAlignment="Center">
                             <TextBlock TextAlignment="Center">Удалить день:</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>День</TextBlock>
@@ -103,6 +114,21 @@
                                 <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
                                 <Button x:Name="DataDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" Command="local:WindowCommands.Data_DeleteDate"/>
                             </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="3" Grid.ColumnSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,5" FontWeight="Bold">
+                            Обновление DATA из вставки
+                        </TextBlock>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBox x:Name="DataAddDataTextBox" Height="100" Width="250" Margin="15,5,5,5" AcceptsReturn="True">
+                            </TextBox>
+                            <Button x:Name="DataAddDataButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
+                                Command="local:WindowCommands.Data_AddData"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -149,7 +175,8 @@
                 </StackPanel>
             </TabItem.Header>
             <TabItem.Content>
-                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,20,3,3">
+                <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,10,3,3">
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Обновление репортов из файла</TextBlock>
                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,5,5,0">
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
@@ -160,7 +187,16 @@
                         <Button x:Name="ReportRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
                                 Command="local:WindowCommands.Report_Refresh"/>
                     </StackPanel>
-                    <TextBlock TextAlignment="Center" Margin="0,25,5,5">Удалить день:</TextBlock>
+                    <Separator Margin="5,10,5,10"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление репортов из вставки</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True">
+                        </TextBox>
+                        <Button x:Name="ReportAddReportButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
+                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                    </StackPanel>
+                    <Separator Margin="5,10,5,10"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock>День</TextBlock>
                         <TextBox x:Name="ReportDeleteDateDay" MaxHeight="20" Width="23" Margin="3" />
@@ -182,8 +218,8 @@
                 </StackPanel>
             </TabItem.Header>
             <TabItem.Content>
-                <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,20,3,3">
-                    <TextBlock HorizontalAlignment="Center" FontSize="15">Обновление дивидендов</TextBlock>
+                <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,10,3,3">
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Обновление дивидендов из файла</TextBlock>
                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,5,5,0">
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
@@ -194,8 +230,16 @@
                         <Button x:Name="DividendRefreshButton" MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
                         Command="local:WindowCommands.Dividend_Refresh"/>
                     </StackPanel>
-                    <Separator Margin="5,25,5,15"></Separator>
-                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,20">Удаление даты</TextBlock>                    
+                    <Separator Margin="5,10,5,10"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление дивидендов из вставки</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True">
+                        </TextBox>
+                        <Button x:Name="DividendAddDivButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
+                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                    </StackPanel>
+                    <Separator Margin="5,10,5,10"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>                    
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock>День</TextBlock>
                         <TextBox x:Name="DividendDeleteDateDay" MaxHeight="20" Width="23" Margin="3" />
@@ -206,9 +250,10 @@
                         <Button x:Name="DividendDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" 
                                 Command="local:WindowCommands.Dividend_DeleteDate"/>
                     </StackPanel>
+                    
+                    
                 </StackPanel>
             </TabItem.Content>
         </TabItem>        
-    </TabControl>
-    
+    </TabControl>    
 </Window>
