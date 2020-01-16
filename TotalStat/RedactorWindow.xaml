@@ -14,11 +14,11 @@
         <CommandBinding Command="local:WindowCommands.Data_AddData" Executed="Data_AddData_Execute"/>
 
         <CommandBinding Command="local:WindowCommands.Finviz_FileDialog" Executed="Finviz_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Finviz_Refresh" Executed="Finviz_Refresh_Execute"/>
-        
+        <CommandBinding Command="local:WindowCommands.Finviz_Refresh" Executed="Finviz_Refresh_Execute"/>        
         <CommandBinding Command="local:WindowCommands.About_FileDialog" Executed="About_FileDialog_Execute"/>
         <CommandBinding Command="local:WindowCommands.About_Refresh" Executed="About_Refresh_Execute"/>
-        
+        <CommandBinding Command="local:WindowCommands.Sector_AddSector" Executed="Sector_AddSector_Execute"/>
+
         <CommandBinding Command="local:WindowCommands.Report_FileDialog" Executed="Report_FileDialog_Execute"/>
         <CommandBinding Command="local:WindowCommands.Report_Refresh" Executed="Report_Refresh_Execute"/>
         <CommandBinding Command="local:WindowCommands.Report_AddReport" Executed="Report_AddReport_Execute"/>
@@ -125,8 +125,8 @@
                             Обновление DATA из вставки
                         </TextBlock>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
-                            <TextBox x:Name="DataAddDataTextBox" Height="100" Width="250" Margin="15,5,5,5" AcceptsReturn="True">
-                            </TextBox>
+                            <TextBox x:Name="DataAddDataTextBox" Height="100" Width="250" Margin="15,5,5,5" AcceptsReturn="True"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                             <Button x:Name="DataAddDataButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
                                 Command="local:WindowCommands.Data_AddData"/>
                         </StackPanel>
@@ -164,6 +164,20 @@
                         <Button x:Name="AboutRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
                                 Command="local:WindowCommands.About_Refresh"/>
                     </StackPanel>
+                    <Separator Margin="5,25,5,15"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Сектора</TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="SectorAddSectorTextBox" Height="150" Width="230" Margin="20,5,5,5" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <StackPanel Orientation="Vertical" MinWidth="110" Margin="5,5,3,3">
+                            <Button x:Name="SectorAddFirstLevelButton" Content="Первый уровень" MinHeight="30" MinWidth="5" Margin="0,3,0,3" 
+                                Command="local:WindowCommands.Sector_AddSector"/>
+                            <Button x:Name="SectorAddSecondLevelButton" Content="Второй уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
+                                Command="local:WindowCommands.Sector_AddSector"/>
+                            <Button x:Name="SectorAddThirdLevelButton" Content="Третий уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
+                                Command="local:WindowCommands.Sector_AddSector"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </TabItem.Content>
         </TabItem>
@@ -187,14 +201,24 @@
                         <Button x:Name="ReportRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
                                 Command="local:WindowCommands.Report_Refresh"/>
                     </StackPanel>
+                    <TextBlock>Формат файла должен быть YYYY.MM.DD(например 2018.12.26)</TextBlock>
+                    <TextBlock>Разделителем BMO и AMC служит слово After</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление репортов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True">
-                        </TextBox>
-                        <Button x:Name="ReportAddReportButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
-                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                        <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <StackPanel Orientation="Vertical" MinWidth="120">
+                            <Button x:Name="ReportAddYesterdayReportButton" Content="Вчера" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Report_AddReport"/>
+                            <Button x:Name="ReportAddTodayReportButton" Content="Сегодня" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Report_AddReport"/>
+                            <Button x:Name="ReportAddTomorrowReportButton" Content="Завтра" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Report_AddReport"/>
+                        </StackPanel>
                     </StackPanel>
+                    <TextBlock>Разделителем BMO и AMC служит слово After</TextBlock>
+                    <TextBlock>Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -230,14 +254,22 @@
                         <Button x:Name="DividendRefreshButton" MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
                         Command="local:WindowCommands.Dividend_Refresh"/>
                     </StackPanel>
+                    <TextBlock>Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление дивидендов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True">
-                        </TextBox>
-                        <Button x:Name="DividendAddDivButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
+                        <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <StackPanel Orientation="Vertical" MinWidth="120">
+                            <Button x:Name="DividendAddYesterdayDivButton" Content="Вчера" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
                                 Command="local:WindowCommands.Dividend_AddDiv"/>
+                            <Button x:Name="DividendAddTodayDivButton" Content="Сегодня" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                            <Button x:Name="DividendAddTomorrowDivButton" Content="Завтра" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                        </StackPanel>                       
                     </StackPanel>
+                    <TextBlock>Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>                    
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -249,9 +281,7 @@
                         <TextBox x:Name="DividendDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
                         <Button x:Name="DividendDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" 
                                 Command="local:WindowCommands.Dividend_DeleteDate"/>
-                    </StackPanel>
-                    
-                    
+                    </StackPanel>                    
                 </StackPanel>
             </TabItem.Content>
         </TabItem>        

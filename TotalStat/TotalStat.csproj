@@ -96,7 +96,10 @@
     <Compile Include="ReportContext.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="ScreenContext.cs" />
+    <Compile Include="Sector.cs" />
+    <Compile Include="SectorContext.cs" />
     <Compile Include="WindowCommands.cs" />
+    <Compile Include="WorkWithData.cs" />
     <Page Include="AppWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

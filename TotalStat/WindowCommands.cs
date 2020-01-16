@@ -26,6 +26,8 @@ namespace TotalStat
             About_FileDialog = new RoutedCommand("About_FileDialog", typeof(RedactorWindow));
             About_Refresh = new RoutedCommand("About_Refresh", typeof(RedactorWindow));
 
+            Sector_AddSector = new RoutedCommand("Sector_AddSector", typeof(RedactorWindow));
+
             Report_FileDialog = new RoutedCommand("Report_FileDialog", typeof(RedactorWindow));
             Report_Refresh = new RoutedCommand("Report_Refresh", typeof(RedactorWindow));
             Report_AddReport = new RoutedCommand("Report_AddReport", typeof(RedactorWindow));
@@ -35,6 +37,9 @@ namespace TotalStat
             Dividend_Refresh = new RoutedCommand("Dividend_Refresh", typeof(RedactorWindow));
             Dividend_AddDiv = new RoutedCommand("Dividend_AddDiv", typeof(RedactorWindow));
             Dividend_DeleteDate = new RoutedCommand("Dividend_DeleteDate", typeof(RedactorWindow));
+
+            Report_AddFromApp = new RoutedCommand("Report_AddFromApp", typeof(AppWindow));
+            Business_Show = new RoutedCommand("Business_Show", typeof(AppWindow));
         }
 
         public static RoutedCommand OpenWindow { get; set; }       
@@ -53,6 +58,8 @@ namespace TotalStat
         public static RoutedCommand About_FileDialog { get; set; }
         public static RoutedCommand About_Refresh { get; set; }
 
+        public static RoutedCommand Sector_AddSector { get; set; }
+
         public static RoutedCommand Report_FileDialog { get; set; }
         public static RoutedCommand Report_Refresh { get; set; }
         public static RoutedCommand Report_AddReport { get; set; }
@@ -62,6 +69,9 @@ namespace TotalStat
         public static RoutedCommand Dividend_Refresh { get; set; }
         public static RoutedCommand Dividend_AddDiv { get; set; }
         public static RoutedCommand Dividend_DeleteDate { get; set; }
+
+        public static RoutedCommand Report_AddFromApp { get; set; }
+        public static RoutedCommand Business_Show { get; set; }
 
     }
 }

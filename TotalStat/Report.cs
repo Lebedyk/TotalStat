@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TotalStat
 {
-    class Report
+    public class Report
     {
         public string Ticker { get; set; }
         public DateTime Date { get; set; }

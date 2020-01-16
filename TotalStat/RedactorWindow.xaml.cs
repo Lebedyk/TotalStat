@@ -476,6 +476,97 @@ namespace TotalStat
             AboutRefreshButton.IsEnabled = true;
         }
 
+        private async void Sector_AddSector_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            SectorAddFirstLevelButton.IsEnabled = false;
+            SectorAddSecondLevelButton.IsEnabled = false;
+            SectorAddThirdLevelButton.IsEnabled = false;
+            
+            SectorContext db = new SectorContext();
+            string text = SectorAddSectorTextBox.Text;
+            string[] split_lines = text.Split('\n');
+            bool error_input = false;
+            int line_error = 1;
+            int sector_level = 0; 
+            if (e.Source == SectorAddFirstLevelButton)
+            {
+                sector_level = 1;                
+            }
+            else if (e.Source == SectorAddSecondLevelButton)
+            {
+                sector_level = 2;                
+            }
+            else if (e.Source == SectorAddThirdLevelButton)
+            {
+                sector_level = 3;                
+            }
+            
+            List<Sector> SectorList = new List<Sector>();
+
+            if (sector_level != 0)
+            {
+                try
+                {
+                    foreach (string split in split_lines)
+                    {
+                        if (split != "")
+                        {
+                            string[] split_spaces;
+                            split_spaces = split.Split(' ');
+                            SectorList.Add(new Sector
+                            {
+                                Ticker = split_spaces[0],
+                                MarketCap = Double.Parse(split_spaces[1]),
+                                SectorName = split_spaces[2],
+                                SectorLevel = sector_level
+                            });                            
+                        }
+                        line_error++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    error_input = true;
+                    MessageBox.Show("Ошибка обновления!\n Строка ошибки: " + line_error +
+                        "\nРекомендуем загрузить информацию заново!", ex.Message);
+                }
+            }
+            else
+            {
+                error_input = true;
+                MessageBox.Show("Ошибка загрузки!\n Загрузите информацию заново!");
+            }
+            if (!error_input)
+            {
+                var transaction = db.Database.BeginTransaction();
+                try
+                {
+                    var delete_old_information = db.Sectors.Where(p => p.SectorLevel == sector_level);
+                    if (delete_old_information != null)
+                    {
+                        db.Sectors.RemoveRange(delete_old_information);
+                        await db.SaveChangesAsync();
+                    }
+                    db.Sectors.AddRange(SectorList);
+                    await db.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    error_input = true;
+                    MessageBox.Show("Ошибка загрузки!\n Загрузите информацию заново!", ex.Message);
+                }
+            }
+            if (!error_input)
+            {
+                MessageBox.Show("Обновление завершено успешно!");
+            }
+            SectorAddFirstLevelButton.IsEnabled = true;
+            SectorAddSecondLevelButton.IsEnabled = true;
+            SectorAddThirdLevelButton.IsEnabled = true;
+        }
+
         private void Report_FileDialog_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -579,14 +670,43 @@ namespace TotalStat
         }
         private async void Report_AddReport_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            ReportAddReportButton.IsEnabled = false;
+            ReportAddYesterdayReportButton.IsEnabled = false;
+            ReportAddTodayReportButton.IsEnabled = false;
+            ReportAddTomorrowReportButton.IsEnabled = false;
             ReportContext db = new ReportContext();
             string text = ReportAddReportTextBox.Text;
             string[] arr = text.Split('\n');
             bool error_input = false;
             int line_error = 1;
-            DateTime today = DateTime.Now.Date;
-            var dates = db.Reports.FirstOrDefault(p => p.Date == today);
+            DateTime datetosave = new DateTime();
+            if (e.Source == ReportAddYesterdayReportButton)
+            {
+                if (DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+                {
+                    datetosave = DateTime.Today.AddDays(-3);
+                }
+                else
+                {
+                    datetosave = DateTime.Today.AddDays(-1);
+                }
+
+            }
+            else if (e.Source == ReportAddTodayReportButton)
+            {
+                datetosave = DateTime.Today;
+            }
+            else if (e.Source == ReportAddTomorrowReportButton)
+            {
+                if (DateTime.Today.DayOfWeek == DayOfWeek.Friday)
+                {
+                    datetosave = DateTime.Today.AddDays(3);
+                }
+                else
+                {
+                    datetosave = DateTime.Today.AddDays(1);
+                }
+            }
+            var dates = db.Reports.FirstOrDefault(p => p.Date == datetosave);
             List<Report> ReportList = new List<Report>();
             string earningtime = "Before Open";
 
@@ -596,12 +716,15 @@ namespace TotalStat
                 {
                     foreach (string split in arr)
                     {
-                        if(split.ToUpper() == "AFTER")
+                        if(split != "")
                         {
-                            earningtime = "After Close";
-                        }
-                        ReportList.Add(new Report { Ticker = split, EarningTime = earningtime, Date = DateTime.Now.Date });                        
-                        line_error++;
+                            if (split.ToUpper() == "AFTER")
+                            {
+                                earningtime = "After Close";
+                            }
+                            ReportList.Add(new Report { Ticker = split, EarningTime = earningtime, Date = datetosave });
+                            line_error++;
+                        }                        
                     }
                 }
                 catch (Exception ex)
@@ -614,7 +737,7 @@ namespace TotalStat
             else
             {
                 error_input = true;
-                MessageBox.Show("Сегодняшняя дата: " + DateTime.Now.Date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
+                MessageBox.Show("Дата: " + datetosave.Date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
             }
             if (!error_input)
             {
@@ -629,14 +752,16 @@ namespace TotalStat
                 {
                     transaction.Rollback();
                     error_input = true;
-                    MessageBox.Show("Ошибка загрузки дивидендов за " + DateTime.Now.Date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
+                    MessageBox.Show("Ошибка загрузки репортов за " + datetosave.Date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                 }
             }
             if (!error_input)
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            ReportAddReportButton.IsEnabled = true;
+            ReportAddYesterdayReportButton.IsEnabled = true;
+            ReportAddTodayReportButton.IsEnabled = true;
+            ReportAddTomorrowReportButton.IsEnabled = true;
         }
         private void Report_DeleteDate_Execute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -781,13 +906,44 @@ namespace TotalStat
         }
         private async void Dividend_AddDiv_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DividendAddDivButton.IsEnabled = false;
+            DividendAddYesterdayDivButton.IsEnabled = false;
+            DividendAddTodayDivButton.IsEnabled = false;
+            DividendAddTomorrowDivButton.IsEnabled = false;
+                        
             DividendContext db = new DividendContext();
             string text = DividendAddDivTextBox.Text;
             string[] arr = text.Split('\n');
             bool error_input = false;
             int line_error = 1;
-            DateTime today = DateTime.Now.Date;
+            DateTime today = new DateTime();
+            if (e.Source == DividendAddYesterdayDivButton)
+            {
+                if(DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+                {
+                    today = DateTime.Today.AddDays(-3);
+                }
+                else
+                {
+                    today = DateTime.Today.AddDays(-1);
+                }
+                
+            }
+            else if (e.Source == DividendAddTodayDivButton)
+            {
+                today = DateTime.Today;
+            }
+            else if (e.Source == DividendAddTomorrowDivButton)
+            {
+                if (DateTime.Today.DayOfWeek == DayOfWeek.Friday)
+                {
+                    today = DateTime.Today.AddDays(3);
+                }
+                else
+                {
+                    today = DateTime.Today.AddDays(1);
+                }                
+            }
+            
             var dates = db.Dividends.FirstOrDefault(p => p.Date == today);
             List<Dividend> DividendList = new List<Dividend>();
 
@@ -797,16 +953,19 @@ namespace TotalStat
                 {
                     foreach (string split in arr)
                     {
-                        string[] arr2;
-                        arr2 = split.Split(' ');
-                        if (arr2.Length > 1)
+                        if(split != "")
                         {
-                            DividendList.Add(new Dividend { Ticker = arr2[0], Sum = Double.Parse(arr2[1]), Date = DateTime.Now.Date });
-                        }
-                        else
-                        {
-                            DividendList.Add(new Dividend { Ticker = arr2[0], Date = DateTime.Now.Date });
-                        }
+                            string[] arr2;
+                            arr2 = split.Split(' ');
+                            if (arr2.Length > 1)
+                            {
+                                DividendList.Add(new Dividend { Ticker = arr2[0], Sum = Double.Parse(arr2[1]), Date = today });
+                            }
+                            else
+                            {
+                                DividendList.Add(new Dividend { Ticker = arr2[0], Date = today });
+                            }
+                        }                        
                         line_error++;
                     }
                 }
@@ -820,7 +979,7 @@ namespace TotalStat
             else
             {
                 error_input = true;
-                MessageBox.Show("Сегодняшняя дата: " + DateTime.Now.Date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
+                MessageBox.Show("Дата: " + today.Date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
             }
             if (!error_input)
             {
@@ -835,14 +994,16 @@ namespace TotalStat
                 {
                     transaction.Rollback();
                     error_input = true;
-                    MessageBox.Show("Ошибка загрузки дивидендов за " + DateTime.Now.Date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
+                    MessageBox.Show("Ошибка загрузки дивидендов за " + today.Date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                 }
             }
             if (!error_input)
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            DividendAddDivButton.IsEnabled = true;
+            DividendAddYesterdayDivButton.IsEnabled = true;
+            DividendAddTodayDivButton.IsEnabled = true;
+            DividendAddTomorrowDivButton.IsEnabled = true;
         }
         private void Dividend_DeleteDate_Execute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -884,12 +1045,10 @@ namespace TotalStat
             DividendDeleteDateButton.IsEnabled = true;
         }
 
-
         private async void GetDataLastRefreshDate()
         {
             await Task.Run(() =>
             {
-                DateTime lastdate = new DateTime();                
                 ScreenContext db = new ScreenContext();
                 var ololo = db.Screens.OrderByDescending(p => p.Date).FirstOrDefault();                
 

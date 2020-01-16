@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="AppWindow" Height="400" Width="400">
     <Window.CommandBindings>
-        
+        <CommandBinding Command="local:WindowCommands.Report_AddFromApp" Executed="Report_AddFromApp_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Business_Show" Executed="Business_Show_Execute"/>
     </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -16,7 +17,7 @@
             <RowDefinition Height="0.13*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" DataContext="{Binding Desc}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>                
@@ -29,35 +30,38 @@
             </Grid.ColumnDefinitions>     
             
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <TextBlock >Ticker</TextBlock>
-                       
+                <TextBlock Text="{Binding Ticker}"/>
+
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock >Companyname</TextBlock>                
+                <TextBlock Text="{Binding CompanyName}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
-                <TextBlock >Industry</TextBlock>                
+                <TextBlock Text="{Binding Industry}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
-                <TextBlock >Sector</TextBlock>               
+                <TextBlock Text="{Binding Sector}"/> 
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <TextBlock >MCap</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >MCap:</TextBlock>
+                <TextBlock Text="{Binding MarketCap}" />
+                <TextBlock >b</TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBlock >Country</TextBlock>                
+                <TextBlock Text="{Binding Country}" /> 
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
-                <TextBlock >SFloat</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >SFloat:</TextBlock>
+                <TextBlock Text="{Binding ShortFloat}"/>
+                <TextBlock >%</TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
-                <TextBlock >AvgVol</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >AvgVol:</TextBlock>
+                <TextBlock Text="{Binding AvarageVolume}"/>
+                <TextBlock >m</TextBlock>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" DataContext="{Binding WorkData}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -68,23 +72,23 @@
                 <ColumnDefinition Width="0.8*"/>                
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <TextBlock >Beta</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >Beta: </TextBlock>
+                <TextBlock Text="{Binding Beta, StringFormat=0.00}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock >Correlation</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >Correlation: </TextBlock>
+                <TextBlock Text="{Binding Correlation, StringFormat=0.00}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <TextBlock >HvBeta</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >HvBeta: </TextBlock>
+                <TextBlock Text="{Binding HvBeta, StringFormat=0.00}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBlock >AvgPremVolume</TextBlock>
-                <TextBlock>***Sum</TextBlock>
+                <TextBlock >AvgPremVol: </TextBlock>
+                <TextBlock Text="{Binding AvgPremVol}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                <Button MinHeight="15" MinWidth="35" Margin="7"/>
+                <Button MinHeight="15" MinWidth="35" Margin="7" Command="local:WindowCommands.Business_Show"/>
                 <Button MinHeight="15" MinWidth="35" Margin="7"/>
             </StackPanel>
         </Grid>
@@ -95,24 +99,21 @@
                 <ColumnDefinition Width="0.8*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <TextBox MinWidth="60" Margin="5">
-                    
+                <TextBox x:Name="FirstStockTextBox" MinWidth="60" Margin="5,5,1,5"  CharacterCasing="Upper"
+                         Text="{Binding FirstStockTextBoxString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
-                <TextBox MinWidth="60" Margin="5">
+                <Button MinWidth="20" Margin="0,5,1,5" Command="local:WindowCommands.Report_AddFromApp">
 
+                </Button>
+                <TextBox x:Name="SecondStockTextBox" MinWidth="60" Margin="5" CharacterCasing="Upper"
+                         Text="{Binding SecondStockTextBoxString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                   
                 </TextBox>
-                <TextBox MinWidth="60" Margin="5">
-
-                </TextBox>
+                
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                <TextBlock MinHeight="10" MinWidth="35" Margin="5">
-                    REP
-                </TextBlock>
-                <TextBlock MinHeight="10" MinWidth="35" Margin="5">
-                    DIV
+                <TextBlock x:Name="ReportShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding ReportForView}"/>
+                <TextBlock x:Name="DividendShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding DivForView}"/>
 
-                </TextBlock>
             </StackPanel>
         </Grid>        
         <Grid Grid.Row="3">
@@ -121,14 +122,24 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="0.8*"/>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" Grid.ColumnSpan="2">
+            <DataGrid Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=WorkData.DataGrid}" 
+                      AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">                
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date"/>
-                    <DataGridTextColumn Header="Ticker1"/>
-                    <DataGridTextColumn Header="Ticker2"/>
-                    <DataGridTextColumn Header="Delta"/>
-                    <DataGridTextColumn Header="PremVol"/>                                      
-                </DataGrid.Columns>                
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}"/>
+                    <DataGridTextColumn Binding="{Binding FirstNitePercent}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding ElementName=FirstStockTextBox, Path=Text}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding SecondNitePercent}">                        
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding ElementName=SecondStockTextBox, Path=Text}"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}"/>
+                    <DataGridTextColumn Header="PremVol" Binding="{Binding FirstPremVol}"/>                                      
+                </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Sector1"></TextBlock>
