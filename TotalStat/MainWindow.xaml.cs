@@ -20,10 +20,11 @@ namespace TotalStat
     /// </summary>
     public partial class MainWindow : Window
     {
+        AppConfiguration config;
         public MainWindow()
         {
             InitializeComponent();
-            
+            config = new AppConfiguration();            
         } 
         private void OpenWindow_Execute(object sender, ExecutedRoutedEventArgs e)
         {

@@ -4,20 +4,32 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
+        Top="{Binding Path = (local:AppConfiguration.AppWindowTop), Mode=TwoWay}" 
+        Left="{Binding Path = (local:AppConfiguration.AppWindowLeft), Mode=TwoWay}"
         mc:Ignorable="d"
-        Title="AppWindow" Height="400" Width="400">
+        Title="AppWindow" Height="{Binding Path=(local:AppConfiguration.AppWindowHeight), Mode=TwoWay, FallbackValue=450}" 
+                            Width="{Binding Path=(local:AppConfiguration.AppWindowWidth), Mode=TwoWay, FallbackValue=450}">
+    
+   
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.Report_AddFromApp" Executed="Report_AddFromApp_Execute"/>
         <CommandBinding Command="local:WindowCommands.Business_Show" Executed="Business_Show_Execute"/>
     </Window.CommandBindings>
-    <Grid>
+
+    <ContentControl.Resources>
+        <Image x:Key="pointerImg" Source="Image/pointer.png"/>
+        <Image x:Key="linkImg" Source="Image/link.png"/>
+        <Image x:Key="businessImg" Source="Image/business.png"/>
+    </ContentControl.Resources>
+    
+    <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
             <RowDefinition Height="0.2*"/>
             <RowDefinition Height="0.13*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" DataContext="{Binding Desc}">
+        <Grid Grid.Row="0" DataContext="{Binding Desc}" Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>                
@@ -27,41 +39,46 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-            </Grid.ColumnDefinitions>     
-            
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <TextBlock Text="{Binding Ticker}"/>
-
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock Text="{Binding CompanyName}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
-                <TextBlock Text="{Binding Industry}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3">
-                <TextBlock Text="{Binding Sector}"/> 
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <TextBlock >MCap:</TextBlock>
-                <TextBlock Text="{Binding MarketCap}" />
-                <TextBlock >b</TextBlock>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBlock Text="{Binding Country}" /> 
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
-                <TextBlock >SFloat:</TextBlock>
-                <TextBlock Text="{Binding ShortFloat}"/>
-                <TextBlock >%</TextBlock>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
-                <TextBlock >AvgVol:</TextBlock>
-                <TextBlock Text="{Binding AvarageVolume}"/>
-                <TextBlock >m</TextBlock>
-            </StackPanel>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.35*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Ticker, FallbackValue=Ticker}" Grid.Row="0" Grid.Column="0" 
+                           FontSize="12" FontWeight="Bold" TextDecorations="Underline"/>
+                <TextBlock Text="{Binding CompanyName, FallbackValue=CompanyName}" Grid.Row="0" Grid.Column="1"
+                           FontSize="11" FontStyle="Italic" Margin="2"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="2">
+                    <TextBlock Text="MCap: " FontSize="11"/>
+                    <TextBlock Text="{Binding MarketCap, FallbackValue=0}" FontWeight="Bold" FontSize="11"/>
+                    <TextBlock Text="b" FontWeight="Bold" FontSize="11"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="2">
+                    <TextBlock Text="SFloat: " FontSize="11"/>
+                    <TextBlock Text="{Binding ShortFloat, FallbackValue=0}" FontWeight="Bold" FontSize="11"/>
+                    <TextBlock Text="%" FontWeight="Bold" FontSize="11"/>
+                </StackPanel>
+                <TextBlock Text="{Binding Country, FallbackValue=Country}" Grid.Row="1" Grid.Column="0"
+                           FontSize="11" FontWeight="Bold" Margin="2"/>
+                <TextBlock Text="{Binding Industry, FallbackValue=Industry}" Grid.Row="1" Grid.Column="1"
+                            FontSize="11" FontStyle="Italic" Margin="2"/>
+                <TextBlock Text="{Binding Sector, FallbackValue=Sector}" Grid.Row="1" Grid.Column="2"
+                           FontSize="11" TextDecorations="Underline" Margin="2"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Margin="2">
+                    <TextBlock Text="AvgVol: " FontSize="11"/>
+                    <TextBlock Text="{Binding AvarageVolume, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Text="m" FontSize="11" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="1" DataContext="{Binding WorkData}">
+        <Grid Grid.Row="1" DataContext="{Binding WorkData}" Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -69,27 +86,35 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="0.8*"/>                
+                <ColumnDefinition/>                
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <TextBlock >Beta: </TextBlock>
-                <TextBlock Text="{Binding Beta, StringFormat=0.00}"/>
+                <TextBlock FontSize="11">Beta: </TextBlock>
+                <TextBlock Text="{Binding Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock >Correlation: </TextBlock>
-                <TextBlock Text="{Binding Correlation, StringFormat=0.00}"/>
+                <TextBlock FontSize="11">Correlation: </TextBlock>
+                <TextBlock Text="{Binding Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <TextBlock >HvBeta: </TextBlock>
-                <TextBlock Text="{Binding HvBeta, StringFormat=0.00}"/>
+                <TextBlock FontSize="11">HvBeta: </TextBlock>
+                <TextBlock Text="{Binding HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBlock >AvgPremVol: </TextBlock>
-                <TextBlock Text="{Binding AvgPremVol}"/>
+                <TextBlock FontSize="11">AvgPremVol: </TextBlock>
+                <TextBlock Text="{Binding AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                <Button MinHeight="15" MinWidth="35" Margin="7" Command="local:WindowCommands.Business_Show"/>
-                <Button MinHeight="15" MinWidth="35" Margin="7"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" HorizontalAlignment="Center">
+                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource businessImg}" Command="local:WindowCommands.Business_Show">
+                    <Button.ToolTip>
+                        <ToolTip>Stock businness</ToolTip>
+                    </Button.ToolTip>
+                </Button>
+                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource linkImg}">
+                    <Button.ToolTip>
+                        <ToolTip>Link</ToolTip>
+                    </Button.ToolTip>
+                </Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2">
@@ -99,13 +124,16 @@
                 <ColumnDefinition Width="0.8*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <TextBox x:Name="FirstStockTextBox" MinWidth="60" Margin="5,5,1,5"  CharacterCasing="Upper"
+                <TextBox x:Name="FirstStockTextBox" Width="80" Margin="5,5,1,5"  CharacterCasing="Upper"
                          Text="{Binding FirstStockTextBoxString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
-                <Button MinWidth="20" Margin="0,5,1,5" Command="local:WindowCommands.Report_AddFromApp">
-
+                <Button MinWidth="20" Margin="0,5,1,5" Command="local:WindowCommands.Report_AddFromApp" 
+                        Content="{StaticResource pointerImg}">
+                    <Button.ToolTip>
+                        <ToolTip>Add to today reports</ToolTip>
+                    </Button.ToolTip>
                 </Button>
-                <TextBox x:Name="SecondStockTextBox" MinWidth="60" Margin="5" CharacterCasing="Upper"
+                <TextBox x:Name="SecondStockTextBox" Width="80" Margin="5" CharacterCasing="Upper"
                          Text="{Binding SecondStockTextBoxString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                   
                 </TextBox>
                 
@@ -113,49 +141,100 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
                 <TextBlock x:Name="ReportShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding ReportForView}"/>
                 <TextBlock x:Name="DividendShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding DivForView}"/>
-
             </StackPanel>
         </Grid>        
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition/>                
+                <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=WorkData.DataGrid}" 
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Path=WorkData.DataGrid}" 
                       AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto">                
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto" RowHeight="20" 
+                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}"/>
-                    <DataGridTextColumn Binding="{Binding FirstNitePercent}">
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" Width="0.65*"
+                                        FontSize="11" FontWeight="Bold">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding FirstNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*" >
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{Binding ElementName=FirstStockTextBox, Path=Text}"/>
                         </DataGridTextColumn.Header>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding SecondNitePercent}">                        
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>                    
+                    <DataGridTextColumn Binding="{Binding SecondNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*">                        
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{Binding ElementName=SecondStockTextBox, Path=Text}"/>
                         </DataGridTextColumn.Header>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}"/>
-                    <DataGridTextColumn Header="PremVol" Binding="{Binding FirstPremVol}"/>                                      
+                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}" FontSize="11" FontWeight="Bold" Width="0.35*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>                    
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="PremVol" Binding="{Binding FirstPremVol}" FontSize="11" FontWeight="Bold" Width="0.5*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>                                                         
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Grid.Column="2">
-                <TextBlock Text="Sector1"></TextBlock>
-                <StackPanel>
-                    
-                </StackPanel>
-                <TextBlock Text="Sector2"></TextBlock>
-                <StackPanel>
-
-                </StackPanel>
-                <TextBlock Text="Sector3"></TextBlock>
-                <StackPanel>
-
-                </StackPanel>
-            </StackPanel>
-            
+            <StackPanel Grid.Column="1" >
+                <GroupBox BorderBrush="Black" Margin="3,-1,3,-1">
+                    <GroupBox.Header>
+                        <TextBlock Text="{Binding FirstSectorForView[0].SectorName, FallbackValue=Sector 1}" FontSize="7" FontWeight="Bold"/>
+                    </GroupBox.Header>
+                    <ListBox ItemsSource="{Binding Path = FirstSectorForView}" HorizontalAlignment="Left">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox> 
+                </GroupBox>
+                <GroupBox BorderBrush="Black" Margin="2,-1,3,-1">
+                    <GroupBox.Header>
+                        <TextBlock Text="{Binding SecondSectorForView[0].SectorName, FallbackValue=Sector 2}" FontSize="7" FontWeight="Bold"/>
+                    </GroupBox.Header>
+                    <ListBox ItemsSource="{Binding Path = SecondSectorForView}"  HorizontalAlignment="Left">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+                <GroupBox BorderBrush="Black" Margin="2,-1,3,-1">
+                    <GroupBox.Header>
+                        <TextBlock Text="{Binding ThirdSectorForView[0].SectorName, FallbackValue=Sector 3}" FontSize="7" FontWeight="Bold"/>
+                    </GroupBox.Header>
+                    <ListBox ItemsSource="{Binding Path = ThirdSectorForView}"  HorizontalAlignment="Left">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+            </StackPanel>            
         </Grid>
 
 

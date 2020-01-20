@@ -20,6 +20,7 @@ namespace TotalStat
     /// <summary>
     /// Interaction logic for AppWindow.xaml
     /// </summary>
+    /// 
     public partial class AppWindow : Window, INotifyPropertyChanged
     {
         private List<List<Screen>> database;
@@ -30,9 +31,9 @@ namespace TotalStat
         private List<Business> businessbase;
         
         private WorkWithData workdata;
-        private ObservableCollection<Sector> firstsectorforview;
-        private ObservableCollection<Sector> secondsectorforview;
-        private ObservableCollection<Sector> thirdsectorforview;
+        private ObservableCollection<Sector> firstsectorforview = new ObservableCollection<Sector>();
+        private ObservableCollection<Sector> secondsectorforview = new ObservableCollection<Sector>();
+        private ObservableCollection<Sector> thirdsectorforview = new ObservableCollection<Sector>();
         private string reportforview;
         private string divforview;
         private string firststocktextboxstring;
@@ -88,6 +89,7 @@ namespace TotalStat
             set
             {
                 firststocktextboxstring = value;
+                SetSectorsByLevels();
                 SetReport();
                 SetDiv();
                 SetDesc();
@@ -150,14 +152,17 @@ namespace TotalStat
             BusinessBase = LoadBusinesses();
             FirstStockTextBoxString = "BAC";
             SecondStockTextBoxString = "SPY";
+            SetSectorsByLevels();
             SetReport();
             SetDiv();
             SetDesc();
             WorkData = new WorkWithData(FirstStockTextBoxString, SecondStockTextBoxString, database);
+            MessageBox.Show("H:" + this.Height + " W:" + this.Width + " Top:" + this.Top + " Left:" + this.Left);
         }
         private void AppWindow_Closed(object sender, EventArgs e)
-        {
+        {            
             App.Current.MainWindow.Visibility = Visibility.Visible;
+            AppConfiguration.SaveSizeAndGeometry();            
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -190,31 +195,43 @@ namespace TotalStat
             FirstSectorForView.Clear();
             SecondSectorForView.Clear();
             ThirdSectorForView.Clear();
-            var first = SectorBase.Where(p => p.SectorLevel == 1).ToList();
-            var second = SectorBase.Where(p => p.SectorLevel == 2).ToList();
-            var third = SectorBase.Where(p => p.SectorLevel == 3).ToList();
-            if(first != null)
+            var first = SectorBase.Where(p => p.SectorLevel == 1).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
+            var second = SectorBase.Where(p => p.SectorLevel == 2).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
+            var third = SectorBase.Where(p => p.SectorLevel == 3).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
+            if (first != null)
             {
-                foreach(Sector i in first)
+                var firstsector = SectorBase.Where(p => p.SectorName == first.SectorName).Take(8);
+                if(firstsector != null)
                 {
-                    FirstSectorForView.Add(i);
+                    foreach(Sector temp in firstsector)
+                    {
+                        FirstSectorForView.Add(temp);
+                    }                   
                 }
             }
             if (second != null)
             {
-                foreach (Sector i in second)
+                var secondsector = SectorBase.Where(p => p.SectorName == second.SectorName).Take(8);
+                if (secondsector != null)
                 {
-                    SecondSectorForView.Add(i);
+                    foreach (Sector temp in secondsector)
+                    {
+                        SecondSectorForView.Add(temp);
+                    }
                 }
             }
-            if (first != null)
+            if (third != null)
             {
-                foreach (Sector i in third)
+                var thirdsector = SectorBase.Where(p => p.SectorName == third.SectorName).Take(8);
+                if (thirdsector != null)
                 {
-                    ThirdSectorForView.Add(i);
+                    foreach (Sector temp in thirdsector)
+                    {
+                        ThirdSectorForView.Add(temp);
+                    }
                 }
             }
-        }     //недоделал
+        }
         private List<Report> LoadReports()
         {
             List<Report> reportslist = new List<Report>();
@@ -381,7 +398,6 @@ namespace TotalStat
             {
                 MessageBox.Show(temp.Biz, temp.Ticker);
             }
-        }
-        
+        }        
     }
 }

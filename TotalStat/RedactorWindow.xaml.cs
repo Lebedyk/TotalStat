@@ -56,12 +56,10 @@ namespace TotalStat
             GetDataLastRefreshDate();
         }
 
-        
-
-
         private void RedactorWindow_Closed(object sender, EventArgs e)
         {
             App.Current.MainWindow.Visibility = Visibility.Visible;
+            AppConfiguration.SaveSizeAndGeometry();
         }
         private void Data_FileDialog_Execute(object sender, ExecutedRoutedEventArgs e)
         {
@@ -512,12 +510,14 @@ namespace TotalStat
                         if (split != "")
                         {
                             string[] split_spaces;
+                            string sectorname;
                             split_spaces = split.Split(' ');
+                            sectorname = String.Join(" ", split_spaces, 2, (split_spaces.Length - 2));
                             SectorList.Add(new Sector
                             {
                                 Ticker = split_spaces[0],
                                 MarketCap = Double.Parse(split_spaces[1]),
-                                SectorName = split_spaces[2],
+                                SectorName = sectorname,
                                 SectorLevel = sector_level
                             });                            
                         }

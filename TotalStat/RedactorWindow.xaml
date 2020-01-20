@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
+        Top="{Binding Path = (local:AppConfiguration.RedactorWindowTop), Mode=TwoWay}" 
+        Left="{Binding Path = (local:AppConfiguration.RedactorWindowLeft), Mode=TwoWay}"
         Title="RedactorWindow" Height="500" Width="400">
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.Data_FileDialog" Executed="Data_FileDialog_Execute"/>
@@ -29,7 +31,7 @@
         <CommandBinding Command="local:WindowCommands.Dividend_AddDiv" Executed="Dividend_AddDiv_Execute"/>
         <CommandBinding Command="local:WindowCommands.Dividend_DeleteDate" Executed="Dividend_DeleteDate_Execute"/>
     </Window.CommandBindings>
-
+    
     <TabControl>
         <TabItem>
             <TabItem.Header>
@@ -55,7 +57,10 @@
                             <RowDefinition/>
                             <RowDefinition Height="0.3*"/>
                         </Grid.RowDefinitions>
-                        <GroupBox Grid.Column="0" BorderBrush="Black" Header="Файлы" Margin="2,3,3,3">
+                        <GroupBox Grid.Column="0" BorderBrush="Black" Margin="2,3,3,3">
+                            <GroupBox.Header>
+                                <TextBlock Text="Файлы" FontWeight="Bold"/>
+                            </GroupBox.Header>
                             <ListBox x:Name="SelectedItems_ListBox" ItemsSource="{Binding Path = ChoosenFiles}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -64,7 +69,7 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </GroupBox>
-
+                        
                         <Grid Grid.Row="1"  ShowGridLines="True" Height="48" Margin="2" VerticalAlignment="Top">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -73,8 +78,20 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="DataAddFile" Grid.Row="0" Content="Добавить" Command="local:WindowCommands.Data_FileDialog"/>
-                            <Button x:Name="DataRemoveFile" Content="Удалить" Grid.Row="1" Command="local:WindowCommands.Data_Remove"/>
+                            <Button x:Name="DataAddFile" Grid.Row="0" Command="local:WindowCommands.Data_FileDialog">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Добавить</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить файлы</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="DataRemoveFile" Grid.Row="1" Command="local:WindowCommands.Data_Remove">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\delete.png" MaxHeight="17"/>
+                                    <TextBlock FontWeight="Bold">Удалить</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Удалить файлы</Button.ToolTip>
+                            </Button>
                         </Grid>
                     </Grid>
 
@@ -91,30 +108,45 @@
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="15" Margin="1" FontWeight="Bold">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="2">
+                            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="15" Margin="1" FontWeight="Bold">
                             Обновление DATA из файлов</TextBlock>
+                            <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0" HorizontalAlignment="Center">(Формат файла в FAQ #####)</TextBlock>
+                        </StackPanel>
 
-
-                        <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" MinHeight="65" MinWidth="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                    Content="Обновить" FontWeight="Bold" Margin="4,10,5,10" Command="local:WindowCommands.Data_Refresh"/>
+                        <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" Height="65" Width="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                 FontWeight="Bold" FontSize="12" Margin="4,10,5,10" Command="local:WindowCommands.Data_Refresh">
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontWeight="Bold">Обновить</TextBlock>
+                                <Image Source="Image\refresh.png" MaxHeight="35"/>
+                            </StackPanel>
+                            <Button.ToolTip>Обновить из списка</Button.ToolTip>
+                        </Button>
                         <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" 
-                       Text="Последнее обновление:" TextWrapping="Wrap" Margin="2,5,0,5"/>
+                       Text="Последнее обновление:" TextWrapping="Wrap" FontStyle="Oblique" Margin="2,5,0,5"/>
                         <TextBlock x:Name="DataLastRefreshTextBlock" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Height="16" Margin="5" Text="{Binding lastUPDATE}" />
+                       Height="16" Margin="5" FontWeight="Bold" Text="{Binding lastUPDATE}" />
 
-                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="15,20,10,15" Height="43" HorizontalAlignment="Center">
-                            <TextBlock TextAlignment="Center">Удалить день:</TextBlock>
+                        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="6,20,10,15" Height="43" HorizontalAlignment="Center">
+                            <TextBlock FontSize="12" FontWeight="Bold"  TextAlignment="Center">Удалить день:</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>День</TextBlock>
-                                <TextBox x:Name="DataDeleteDateDay" MaxHeight="20" Width="23" Margin="3" />
+                                <TextBox x:Name="DataDeleteDateDay" MaxHeight="20" Width="23" Margin="2" />
                                 <TextBlock>Месяц</TextBlock>
-                                <TextBox x:Name="DataDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" />
+                                <TextBox x:Name="DataDeleteDateMonth" MaxHeight="20" Width="23" Margin="2" />
                                 <TextBlock>Год</TextBlock>
-                                <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
-                                <Button x:Name="DataDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" Command="local:WindowCommands.Data_DeleteDate"/>
-                            </StackPanel>
-                        </StackPanel>
+                                <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="2"/>
+                                <Button x:Name="DataDeleteDateButton" MaxHeight="20" Margin="3,0,0,0" 
+                                        Command="local:WindowCommands.Data_DeleteDate">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Image\delete.png"/>
+                                        <TextBlock FontWeight="Bold">Удалить</TextBlock>
+                                    </StackPanel>
+                                    <Button.ToolTip>Удалить указанный день из базы</Button.ToolTip>
+                                </Button>
+                            </StackPanel>                            
+                        </StackPanel>                        
+                        
                     </Grid>
                     <Grid Grid.Row="3" Grid.ColumnSpan="3">
                         <Grid.RowDefinitions>
@@ -126,9 +158,24 @@
                         </TextBlock>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBox x:Name="DataAddDataTextBox" Height="100" Width="250" Margin="15,5,5,5" AcceptsReturn="True"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                            <Button x:Name="DataAddDataButton" Content="Добавить" MinHeight="55" MinWidth="70" Margin="8,20,20,20" 
-                                Command="local:WindowCommands.Data_AddData"/>
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <TextBox.ToolTip>
+                                    <StackPanel>
+                                        <TextBlock>Ticker Open Close Nite NitePercent ImbNY ImbEX PremVol</TextBlock>
+                                        <TextBlock>ПРИМЕР:</TextBlock>
+                                        <TextBlock>BLL	41.88	41.65	-0.23	-0.55	700	-6500	1339</TextBlock>
+                                        <TextBlock>BTZ	12.39	12.39	0	0	1200	0	0</TextBlock>                                        
+                                    </StackPanel>
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Button x:Name="DataAddDataButton" Height="55" Width="70" Margin="8,20,20,20" 
+                                Command="local:WindowCommands.Data_AddData">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold">Добавить</TextBlock>
+                                    <Image Source="Image\add.png" Width="35"/>                                    
+                                </StackPanel>
+                                <Button.ToolTip>Добавить дату за сегодня</Button.ToolTip>
+                            </Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -145,37 +192,75 @@
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,20,3,3">
                     <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold" >Информация с Finviz</TextBlock>
                     <Separator></Separator>                    
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,5,5,0">
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Normal"   
+                               FontSize="11" Margin="40,5,5,0">
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>                    
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="FinvizFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="20, 0,0,0"/>
+                        <TextBox x:Name="FinvizFilePath" MinWidth="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10, 0,0,0"/>
                         <Button x:Name="FinvizAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                                Command="local:WindowCommands.Finviz_FileDialog"/>
-                        <Button x:Name="FinvizRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
-                                Command="local:WindowCommands.Finviz_Refresh"/>
-                    </StackPanel>                    
-                    <Separator Margin="5,25,5,15"></Separator>
-                    <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Род деятельности</TextBlock>
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="AboutFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="20, 0,0,0"/>
-                        <Button x:Name="AboutAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                                Command="local:WindowCommands.About_FileDialog"/>
-                        <Button x:Name="AboutRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
-                                Command="local:WindowCommands.About_Refresh"/>
+                                Command="local:WindowCommands.Finviz_FileDialog">
+                            <Button.ToolTip>Добавить файлы</Button.ToolTip>
+                        </Button>
+                        <Button x:Name="FinvizRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0" 
+                                Command="local:WindowCommands.Finviz_Refresh">                            
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\refresh.png"/>
+                                <TextBlock FontWeight="Bold">Обновить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Обновить из выбранного файла</Button.ToolTip>
+                        </Button>
                     </StackPanel>
-                    <Separator Margin="5,25,5,15"></Separator>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <Separator Margin="5,15,5,15"></Separator>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Род деятельности</TextBlock>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Normal"   
+                               FontSize="11" Margin="40,5,5,0">
+                        <TextBlock.Text>Выберите файл:</TextBlock.Text>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBox x:Name="AboutFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10,0,0,0"/>
+                        <Button x:Name="AboutAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
+                                Command="local:WindowCommands.About_FileDialog">
+                            <Button.ToolTip>Добавить файлы</Button.ToolTip>
+                        </Button>
+                        <Button x:Name="AboutRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0"
+                                Command="local:WindowCommands.About_Refresh">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\refresh.png"/>
+                                <TextBlock FontWeight="Bold">Обновить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Обновить из выбранного файла</Button.ToolTip>                            
+                        </Button>
+                    </StackPanel>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <Separator Margin="5,15,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Сектора</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="SectorAddSectorTextBox" Height="150" Width="230" Margin="20,5,5,5" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                        <TextBox x:Name="SectorAddSectorTextBox" Height="150" Width="230" Margin="20,5,5,10" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <TextBox.ToolTip>
+                                <StackPanel>
+                                    <TextBlock>Ticker MarketCap Sector </TextBlock>
+                                    <TextBlock>ПРИМЕР:</TextBlock>
+                                    <TextBlock>BAC 314.83 Divirsified Banks</TextBlock>
+                                    <TextBlock>MSFT 1280.7 Business Software Services</TextBlock>
+                                </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
                         <StackPanel Orientation="Vertical" MinWidth="110" Margin="5,5,3,3">
                             <Button x:Name="SectorAddFirstLevelButton" Content="Первый уровень" MinHeight="30" MinWidth="5" Margin="0,3,0,3" 
-                                Command="local:WindowCommands.Sector_AddSector"/>
+                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                <Button.ToolTip>Обновляет сектор 1 уровня</Button.ToolTip>
+                            </Button>
                             <Button x:Name="SectorAddSecondLevelButton" Content="Второй уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
-                                Command="local:WindowCommands.Sector_AddSector"/>
+                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                <Button.ToolTip>Обновляет сектор 2 уровня</Button.ToolTip>
+                            </Button>
                             <Button x:Name="SectorAddThirdLevelButton" Content="Третий уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
-                                Command="local:WindowCommands.Sector_AddSector"/>
+                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                <Button.ToolTip>Обновляет сектор 3 уровня</Button.ToolTip>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -191,34 +276,74 @@
             <TabItem.Content>
                 <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,10,3,3">
                     <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Обновление репортов из файла</TextBlock>
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,5,5,0">
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Normal"   
+                               FontSize="11" Margin="40,5,5,0">
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="ReportFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Justify" Margin="30, 0,0,0"/>
+                        <TextBox x:Name="ReportFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Justify" Margin="15,0,0,0"/>
                         <Button x:Name="ReportAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                        Command="local:WindowCommands.Report_FileDialog"/>
-                        <Button x:Name="ReportRefreshButton"  MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
-                                Command="local:WindowCommands.Report_Refresh"/>
+                        Command="local:WindowCommands.Report_FileDialog">
+                            <Button.ToolTip>Добавить файлы</Button.ToolTip>
+                        </Button>
+                        <Button x:Name="ReportRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0"
+                                Command="local:WindowCommands.Report_Refresh">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\refresh.png"/>
+                                <TextBlock FontWeight="Bold">Обновить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Обновить репорты из выбранного файла</Button.ToolTip>
+                        </Button>
                     </StackPanel>
-                    <TextBlock>Формат файла должен быть YYYY.MM.DD(например 2018.12.26)</TextBlock>
-                    <TextBlock>Разделителем BMO и AMC служит слово After</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Разделителем BMO и AMC служит слово After</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление репортов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                        <StackPanel Orientation="Vertical" MinWidth="120">
-                            <Button x:Name="ReportAddYesterdayReportButton" Content="Вчера" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Report_AddReport"/>
-                            <Button x:Name="ReportAddTodayReportButton" Content="Сегодня" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Report_AddReport"/>
-                            <Button x:Name="ReportAddTomorrowReportButton" Content="Завтра" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Report_AddReport"/>
+                        <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="200" Margin="15,5,5,5" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <TextBox.ToolTip>
+                                <StackPanel>
+                                    <TextBlock>Ticker</TextBlock>
+                                    <TextBlock>ПРИМЕР:</TextBlock>
+                                    <TextBlock>BAC</TextBlock>
+                                    <TextBlock>LEN</TextBlock>
+                                    <TextBlock>After</TextBlock>
+                                    <TextBlock>MSFT</TextBlock>
+                                </StackPanel>                                
+                            </TextBox.ToolTip>
+                        </TextBox>
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="ReportAddYesterdayReportButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
+                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Вчера</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить репорты за вчера</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="ReportAddTodayReportButton" Height="25" MinWidth="40" Margin="8,5,5,5" 
+                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Сегодня</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить репорты за сегодня</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="ReportAddTomorrowReportButton" Height="25" MinWidth="40" Margin="8,5,5,5" 
+                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Завтра</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить репорты за завтра</Button.ToolTip>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock>Разделителем BMO и AMC служит слово After</TextBlock>
-                    <TextBlock>Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Разделителем BMO и AMC служит слово After</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -228,8 +353,14 @@
                         <TextBox x:Name="ReportDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" />
                         <TextBlock>Год</TextBlock>
                         <TextBox x:Name="ReportDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
-                        <Button x:Name="ReportDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" 
-                                Command="local:WindowCommands.Report_DeleteDate"/>
+                        <Button x:Name="ReportDeleteDateButton" MaxHeight="20" Margin="8,0,0,0" 
+                                FontWeight="Bold" Command="local:WindowCommands.Report_DeleteDate">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\delete.png"/>
+                                <TextBlock FontWeight="Bold">Удалить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Удалить указанный день из базы</Button.ToolTip>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </TabItem.Content>
@@ -244,32 +375,69 @@
             <TabItem.Content>
                 <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,10,3,3">
                     <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Обновление дивидендов из файла</TextBlock>
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,5,5,0">
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Oblique"   
+                               FontSize="11" Margin="40,5,5,0">
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="DividendFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Right" Margin="30, 0,0,0"/>
+                        <TextBox x:Name="DividendFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Right" Margin="15, 0,0,0"/>
                         <Button x:Name="DividendAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left"
-                        Command="local:WindowCommands.Dividend_FileDialog"/>
-                        <Button x:Name="DividendRefreshButton" MinWidth="60" MinHeight="20" Margin="30,0,0,0" Content="Обновить"
-                        Command="local:WindowCommands.Dividend_Refresh"/>
+                        Command="local:WindowCommands.Dividend_FileDialog">
+                            <Button.ToolTip>Добавить файлы</Button.ToolTip>
+                        </Button>
+                        <Button x:Name="DividendRefreshButton" MinWidth="60" Height="20" Margin="20,0,0,0"
+                        Command="local:WindowCommands.Dividend_Refresh">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\refresh.png"/>
+                                <TextBlock FontWeight="Bold">Обновить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Обновить дивиденды из выбранного файла</Button.ToolTip>
+                        </Button>
                     </StackPanel>
-                    <TextBlock>Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление дивидендов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="150" Margin="30,5,5,5" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                        <StackPanel Orientation="Vertical" MinWidth="120">
-                            <Button x:Name="DividendAddYesterdayDivButton" Content="Вчера" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv"/>
-                            <Button x:Name="DividendAddTodayDivButton" Content="Сегодня" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv"/>
-                            <Button x:Name="DividendAddTomorrowDivButton" Content="Завтра" MinHeight="25" MinWidth="40" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv"/>
+                        <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="200" Margin="15,5,5,5" AcceptsReturn="True"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <TextBox.ToolTip>
+                                <StackPanel>
+                                    <TextBlock>Ticker Sum</TextBlock>
+                                    <TextBlock>ПРИМЕР:</TextBlock>
+                                    <TextBlock>BAC 0.35</TextBlock>
+                                    <TextBlock>MSFT 1.24</TextBlock>
+                                </StackPanel>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                        <StackPanel Orientation="Vertical">
+                            <Button x:Name="DividendAddYesterdayDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Dividend_AddDiv">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Вчера</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить дивиденды за вчера</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="DividendAddTodayDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Dividend_AddDiv">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Сегодня</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить дивиденды за сегодня</Button.ToolTip>
+                            </Button>
+                            <Button x:Name="DividendAddTomorrowDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
+                                Command="local:WindowCommands.Dividend_AddDiv">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Image\add.png"/>
+                                    <TextBlock FontWeight="Bold">Завтра</TextBlock>
+                                </StackPanel>
+                                <Button.ToolTip>Добавить дивиденды за завтра</Button.ToolTip>
+                            </Button>
                         </StackPanel>                       
                     </StackPanel>
-                    <TextBlock>Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>                    
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -279,8 +447,14 @@
                         <TextBox x:Name="DividendDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" />
                         <TextBlock>Год</TextBlock>
                         <TextBox x:Name="DividendDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
-                        <Button x:Name="DividendDeleteDateButton" Content="Удалить" MaxHeight="20" Margin="8,0,0,0" 
-                                Command="local:WindowCommands.Dividend_DeleteDate"/>
+                        <Button x:Name="DividendDeleteDateButton" MaxHeight="20" Margin="8,0,0,0" 
+                                Command="local:WindowCommands.Dividend_DeleteDate">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Image\delete.png"/>
+                                <TextBlock FontWeight="Bold">Удалить</TextBlock>
+                            </StackPanel>
+                            <Button.ToolTip>Удалить указанный день из базы</Button.ToolTip>
+                        </Button>
                     </StackPanel>                    
                 </StackPanel>
             </TabItem.Content>
