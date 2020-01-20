@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Business.cs" />
     <Compile Include="BusinessContext.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="DescriptionContext.cs" />
     <Compile Include="Dividend.cs" />
     <Compile Include="DividendContext.cs" />

@@ -16,12 +16,50 @@
         <CommandBinding Command="local:WindowCommands.Business_Show" Executed="Business_Show_Execute"/>
     </Window.CommandBindings>
 
-    <ContentControl.Resources>
+    <Window.Resources>
         <Image x:Key="pointerImg" Source="Image/pointer.png"/>
         <Image x:Key="linkImg" Source="Image/link.png"/>
         <Image x:Key="businessImg" Source="Image/business.png"/>
-    </ContentControl.Resources>
-    
+        
+        <local:SetDataGridColorConverter x:Key="DeltaConvDataGrid" 
+                                         DefaultBrush="{x:Null}" DarkRedBrush="DarkRed" DarkGreenBrush="DarkGreen"/>
+        <local:ReportShowConverter x:Key="ReportShowConv" 
+                                         DefaultBrush="{x:Null}" DarkRedBrush="DarkRed" DarkGreenBrush="DarkGreen" DarkBlueBrush="DarkBlue"/>
+        <local:DividendShowConverter x:Key="DividendShowConv" DefaultBrush="{x:Null}" BlackBrush="Black"/>
+        <local:ReportInSectorConverter x:Key="ReportInSectorConv" 
+                                         DefaultBrush="{x:Null}" DarkRedBrush="#FFE57A56"/>
+        
+        
+
+        <Style x:Key="DeltaStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{Binding Path=DeltaNite, Converter={StaticResource DeltaConvDataGrid}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="NiteFirstStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{Binding Path=FirstNitePercent, Converter={StaticResource DeltaConvDataGrid}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="NiteSecondStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{Binding Path=SecondNitePercent, Converter={StaticResource DeltaConvDataGrid}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ReportShowStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="{Binding Path = ReportForView, Converter={StaticResource ReportShowConv}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        
+        <Style x:Key="DividendShowStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="{Binding Path = DivForView, Converter={StaticResource DividendShowConv}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        
+        <Style x:Key="ReportInSectorStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="{Binding Ticker, Converter={StaticResource ReportInSectorConv}}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
@@ -89,19 +127,19 @@
                 <ColumnDefinition/>                
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                <TextBlock FontSize="11">Beta: </TextBlock>
+                <TextBlock Text="Beta: " FontSize="11"/>
                 <TextBlock Text="{Binding Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                <TextBlock FontSize="11">Correlation: </TextBlock>
+                <TextBlock Text="Correlation: " FontSize="11"/>
                 <TextBlock Text="{Binding Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                <TextBlock FontSize="11">HvBeta: </TextBlock>
+                <TextBlock Text="HvBeta: " FontSize="11"/>
                 <TextBlock Text="{Binding HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-                <TextBlock FontSize="11">AvgPremVol: </TextBlock>
+                <TextBlock Text="AvgPremVol: " FontSize="11"/>
                 <TextBlock Text="{Binding AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" HorizontalAlignment="Center">
@@ -139,8 +177,25 @@
                 
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2">
-                <TextBlock x:Name="ReportShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding ReportForView}"/>
-                <TextBlock x:Name="DividendShow" MinHeight="10" MinWidth="35" Margin="5" Text="{Binding DivForView}"/>
+                <TextBlock x:Name="ReportShow" MinHeight="10" MinWidth="35" Margin="5" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center"
+                           Text="{Binding ReportForView, FallbackValue=Rep}" Style="{StaticResource ReportShowStyle}" Foreground="FloralWhite">                    
+                    <TextBlock.ToolTip>
+                        <StackPanel>
+                            <TextBlock>YY-day before yesterday</TextBlock>
+                            <TextBlock>Y - yesterday</TextBlock>
+                            <TextBlock>A - today</TextBlock>
+                            <TextBlock>T - tomorrow</TextBlock>
+                            <TextBlock>BO - before open</TextBlock>
+                            <TextBlock>AC - after close</TextBlock>
+                        </StackPanel>                        
+                    </TextBlock.ToolTip>
+                </TextBlock>
+                <TextBlock x:Name="DividendShow" MinHeight="10" MinWidth="35" Margin="5" VerticalAlignment="Center" FontWeight="Bold" TextAlignment="Center"
+                           Text="{Binding DivForView, FallbackValue=Div}" Style="{StaticResource DividendShowStyle}" Foreground="Red">
+                    <TextBlock.ToolTip>
+                        <TextBlock>Наличие дивидендов сегодня</TextBlock>
+                    </TextBlock.ToolTip>
+                </TextBlock>
             </StackPanel>
         </Grid>        
         <Grid Grid.Row="3">
@@ -148,12 +203,12 @@
                 <ColumnDefinition/>                
                 <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" ItemsSource="{Binding Path=WorkData.DataGrid}" 
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Path = WorkData.DataGrid}"
                       AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto" RowHeight="20" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto" RowHeight="17" 
                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" Width="0.65*"
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" Width="0.6*"
                                         FontSize="11" FontWeight="Bold">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
@@ -161,40 +216,27 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding FirstNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*" >
+                    <DataGridTextColumn Binding="{Binding FirstNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                                        ElementStyle="{StaticResource NiteFirstStyle}">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="{Binding ElementName=FirstStockTextBox, Path=Text}"/>
+                            <TextBlock Text="{Binding ElementName = FirstStockTextBox, Path=Text}"/>
                         </DataGridTextColumn.Header>
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>                    
-                    <DataGridTextColumn Binding="{Binding SecondNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*">                        
+                    <DataGridTextColumn Binding="{Binding SecondNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                                        ElementStyle="{StaticResource NiteSecondStyle}">                        
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{Binding ElementName=SecondStockTextBox, Path=Text}"/>
-                        </DataGridTextColumn.Header>
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn.Header>                       
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}" FontSize="11" FontWeight="Bold" Width="0.35*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>                    
-                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                                        ElementStyle="{StaticResource DeltaStyle}"/>
                     <DataGridTextColumn Header="PremVol" Binding="{Binding FirstPremVol}" FontSize="11" FontWeight="Bold" Width="0.5*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>                                                         
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Column="1" >
@@ -202,10 +244,11 @@
                     <GroupBox.Header>
                         <TextBlock Text="{Binding FirstSectorForView[0].SectorName, FallbackValue=Sector 1}" FontSize="7" FontWeight="Bold"/>
                     </GroupBox.Header>
-                    <ListBox ItemsSource="{Binding Path = FirstSectorForView}" HorizontalAlignment="Left">
+                    <ListBox ItemsSource="{Binding Path = FirstSectorForView}" HorizontalAlignment="Left">                        
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                                <TextBlock Text="{Binding Ticker}" Style="{StaticResource ReportInSectorStyle}"  
+                                           FontSize="7" Margin="2,-2,2,-2"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox> 
@@ -217,7 +260,8 @@
                     <ListBox ItemsSource="{Binding Path = SecondSectorForView}"  HorizontalAlignment="Left">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                                <TextBlock Text="{Binding Ticker}" Style="{StaticResource ReportInSectorStyle}"
+                                           FontSize="7" Margin="2,-2,2,-2"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -229,7 +273,8 @@
                     <ListBox ItemsSource="{Binding Path = ThirdSectorForView}"  HorizontalAlignment="Left">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Ticker}" FontSize="7" Margin="2,-2,2,-2"/>
+                                <TextBlock Text="{Binding Ticker}" Style="{StaticResource ReportInSectorStyle}"
+                                           FontSize="7" Margin="2,-2,2,-2"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

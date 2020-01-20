@@ -34,6 +34,7 @@ namespace TotalStat
         private ObservableCollection<Sector> firstsectorforview = new ObservableCollection<Sector>();
         private ObservableCollection<Sector> secondsectorforview = new ObservableCollection<Sector>();
         private ObservableCollection<Sector> thirdsectorforview = new ObservableCollection<Sector>();
+        private static List<Report> actualreports = new List<Report>();
         private string reportforview;
         private string divforview;
         private string firststocktextboxstring;
@@ -138,6 +139,11 @@ namespace TotalStat
             get { return thirdsectorforview; }
             set { thirdsectorforview = value; }
         }
+        public static List<Report> ActualReports
+        {
+            get { return actualreports; }
+            set { actualreports = value; }
+        }
 
         public AppWindow()
         {            
@@ -156,8 +162,8 @@ namespace TotalStat
             SetReport();
             SetDiv();
             SetDesc();
-            WorkData = new WorkWithData(FirstStockTextBoxString, SecondStockTextBoxString, database);
-            MessageBox.Show("H:" + this.Height + " W:" + this.Width + " Top:" + this.Top + " Left:" + this.Left);
+            ActualReports = GetActualReports();
+            WorkData = new WorkWithData(FirstStockTextBoxString, SecondStockTextBoxString, database);            
         }
         private void AppWindow_Closed(object sender, EventArgs e)
         {            
@@ -342,6 +348,44 @@ namespace TotalStat
             }
             ReportForView = firstcharacter + secondcharacter;
         }
+        private List<Report> GetActualReports()
+        {
+            List<Report> ActualReportList = new List<Report>();
+            DateTime today = DateTime.Today;
+            DateTime yesterday = today.AddDays(-1);
+            DateTime beforeyesterday = today.AddDays(-2);
+            DateTime tomorrow = today.AddDays(1);
+
+            if (today.DayOfWeek == DayOfWeek.Friday)
+            {
+                beforeyesterday = today.AddDays(-2);
+                yesterday = today.AddDays(-1);
+                tomorrow = today.AddDays(3);
+            }
+            else if (today.DayOfWeek == DayOfWeek.Monday)
+            {
+                beforeyesterday = today.AddDays(-4);
+                yesterday = today.AddDays(-3);
+                tomorrow = today.AddDays(1);
+            }
+            else if (today.DayOfWeek == DayOfWeek.Tuesday)
+            {
+                beforeyesterday = today.AddDays(-4);
+                yesterday = today.AddDays(-1);
+                tomorrow = today.AddDays(1);
+            }
+            var RepTodayBeforeOpen = ReportBase.Where(p=>p.Date == today).Where(p=>p.EarningTime == "Before Open").ToList();
+            var RepYesterdayAfterClose = ReportBase.Where(p => p.Date == yesterday).Where(p => p.EarningTime == "After Close").ToList();
+            if(RepTodayBeforeOpen.Count() > 0)
+            {
+                ActualReportList.AddRange(RepTodayBeforeOpen);
+            }
+            if(RepYesterdayAfterClose.Count>0)
+            {
+                ActualReportList.AddRange(RepYesterdayAfterClose);
+            }
+            return ActualReportList;
+        }
         private List<Dividend> LoadDividends()
         {
             List<Dividend> dividends = new List<Dividend>();
@@ -353,10 +397,10 @@ namespace TotalStat
         private void SetDiv()
         {
             DivForView = "";
-            Dividend temp = DividendBase.Where(p => p.Ticker == FirstStockTextBoxString).FirstOrDefault();
+            Dividend temp = DividendBase.Where(p => p.Ticker == FirstStockTextBoxString).FirstOrDefault();            
             if(temp!=null)
             {
-                DivForView = "D";
+                DivForView = temp.Sum.ToString();
             }
         }
         private List<Description> LoadDescriptions()
@@ -398,6 +442,6 @@ namespace TotalStat
             {
                 MessageBox.Show(temp.Biz, temp.Ticker);
             }
-        }        
+        }                
     }
 }

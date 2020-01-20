@@ -722,7 +722,9 @@ namespace TotalStat
                             {
                                 earningtime = "After Close";
                             }
-                            ReportList.Add(new Report { Ticker = split, EarningTime = earningtime, Date = datetosave });
+                            string ticker = split.Replace("\r", "");
+                            ticker = ticker.ToUpper();
+                            ReportList.Add(new Report { Ticker = ticker, EarningTime = earningtime, Date = datetosave });
                             line_error++;
                         }                        
                     }
@@ -959,13 +961,13 @@ namespace TotalStat
                             arr2 = split.Split(' ');
                             if (arr2.Length > 1)
                             {
-                                DividendList.Add(new Dividend { Ticker = arr2[0], Sum = Double.Parse(arr2[1]), Date = today });
+                                DividendList.Add(new Dividend { Ticker = arr2[0].Replace("\r","").ToUpper(), Sum = Double.Parse(arr2[1]), Date = today });
                             }
                             else
                             {
-                                DividendList.Add(new Dividend { Ticker = arr2[0], Date = today });
+                                DividendList.Add(new Dividend { Ticker = arr2[0].Replace("\r", "").ToUpper(), Sum = 0, Date = today });
                             }
-                        }                        
+                        }
                         line_error++;
                     }
                 }
