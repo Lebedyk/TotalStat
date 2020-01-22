@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace TotalStat
 {
@@ -13,6 +8,7 @@ namespace TotalStat
         {
             OpenWindow = new RoutedCommand("OpenWindow", typeof(MainWindow));           
             Exit = new RoutedCommand("Exit", typeof(MainWindow));
+            FAQ = new RoutedCommand("FAQ", typeof(MainWindow));
 
             Data_FileDialog = new RoutedCommand("Data_FileDialog", typeof(RedactorWindow));
             Data_Remove = new RoutedCommand("Data_Remove", typeof(RedactorWindow));
@@ -46,6 +42,7 @@ namespace TotalStat
 
         public static RoutedCommand OpenWindow { get; set; }       
         public static RoutedCommand Exit { get; set; }
+        public static RoutedCommand FAQ { get; set; }
 
         public static RoutedCommand Data_FileDialog { get; set; }
         public static RoutedCommand Data_Remove { get; set; }

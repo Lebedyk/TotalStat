@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Top="{Binding Path = (local:AppConfiguration.RedactorWindowTop), Mode=TwoWay}" 
         Left="{Binding Path = (local:AppConfiguration.RedactorWindowLeft), Mode=TwoWay}"
-        Title="RedactorWindow" Height="500" Width="400">
+        Title="RedactorWindow" Height="520" Width="400">
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.Data_FileDialog" Executed="Data_FileDialog_Execute"/>
         <CommandBinding Command="local:WindowCommands.Data_Remove" Executed="Data_Remove_Execute"/>
@@ -32,7 +32,7 @@
         <CommandBinding Command="local:WindowCommands.Dividend_DeleteDate" Executed="Dividend_DeleteDate_Execute"/>
     </Window.CommandBindings>
     
-    <TabControl>
+    <TabControl>        
         <TabItem>
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
@@ -45,12 +45,22 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="0.55*"/>
+                        <RowDefinition Height="0.07*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.8*"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+                    <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center">
+                        <StatusBarItem>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Статус: " Margin="4,0,8,0" FontSize="10" FontStyle="Italic"></TextBlock>
+                                <TextBlock x:Name="CurrentStatusBar" FontSize="10" FontStyle="Italic" MinWidth="250"/>
+                            </StackPanel>                            
+                        </StatusBarItem>
+                        
+                    </StatusBar>
 
                     <Grid Grid.Column="0" Grid.Row="0"  ShowGridLines="True">
                         <Grid.RowDefinitions>
@@ -78,14 +88,14 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="DataAddFile" Grid.Row="0" Command="local:WindowCommands.Data_FileDialog">
+                            <Button x:Name="DataAddFileButton" Grid.Row="0" Command="local:WindowCommands.Data_FileDialog">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Добавить</TextBlock>
                                 </StackPanel>
                                 <Button.ToolTip>Добавить файлы</Button.ToolTip>
                             </Button>
-                            <Button x:Name="DataRemoveFile" Grid.Row="1" Command="local:WindowCommands.Data_Remove">
+                            <Button x:Name="DataRemoveFileButton" Grid.Row="1" Command="local:WindowCommands.Data_Remove">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\delete.png" MaxHeight="17"/>
                                     <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -148,7 +158,7 @@
                         </StackPanel>                        
                         
                     </Grid>
-                    <Grid Grid.Row="3" Grid.ColumnSpan="3">
+                    <Grid Grid.Row="1" Grid.ColumnSpan="3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.2*"/>
                             <RowDefinition/>
@@ -197,7 +207,7 @@
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>                    
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="FinvizFilePath" MinWidth="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10, 0,0,0"/>
+                        <TextBox x:Name="FinvizFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10, 0,0,0"/>
                         <Button x:Name="FinvizAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
                                 Command="local:WindowCommands.Finviz_FileDialog">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>

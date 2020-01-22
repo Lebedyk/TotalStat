@@ -1,0 +1,3 @@
+AppSize 402x400
+AppGeometry 292x653.6
+RedactorGeometry 153.6x886.4

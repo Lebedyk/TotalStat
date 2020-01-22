@@ -9,6 +9,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.OpenWindow" Executed="OpenWindow_Execute"/>
         <CommandBinding Command="local:WindowCommands.Exit" Executed="Exit_Execute"/>
+        <CommandBinding Command="local:WindowCommands.FAQ" Executed="FAQ_Execute"/>
     </Window.CommandBindings>
     
     <Grid>       
@@ -30,7 +31,7 @@
                 <MenuItem Header="Exit" Command="local:WindowCommands.Exit"/>
             </MenuItem>
             <MenuItem Header="Help">
-                
+                <MenuItem Header="FAQ" Command="local:WindowCommands.FAQ"/>
             </MenuItem>            
         </Menu>
 

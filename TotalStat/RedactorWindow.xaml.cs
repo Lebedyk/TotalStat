@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data.Entity;
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -103,9 +95,9 @@ namespace TotalStat
         }
         private async void Data_Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
+            ButtonControlDataTab(false);
             if (ChoosenFiles.Count() > 0)
-            {
-                DataRefreshButton.IsEnabled = false;
+            {                
                 foreach (FileDialogSelect fileDialog in ChoosenFiles.ToArray())
                 {
                     ScreenContext db = new ScreenContext();
@@ -140,6 +132,10 @@ namespace TotalStat
                                 error_input = true;
                                 MessageBox.Show("Дата: " + file_date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
                             }
+                            else
+                            {
+                                CurrentStatusBar.Text = "Идет добавление " + file_date.Date.ToString();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -148,19 +144,20 @@ namespace TotalStat
                         }
                         while ((!error_input) && ((line = await file.ReadLineAsync()) != null))
                         {
+                            line = line.Replace(",", "");
                             string[] split_Arr = line.Split('\t');
                             try
                             {
                                 addScreenToTable.Add(new Screen
                                 {
                                     Ticker = split_Arr[0],
-                                    Open = Double.Parse(split_Arr[1]),
-                                    Close = Double.Parse(split_Arr[2]),
-                                    Nite = Double.Parse(split_Arr[3]),
-                                    NitePercent = Double.Parse(split_Arr[4]),
-                                    ImbNY = Int32.Parse(split_Arr[5]),
-                                    ImbEx = Int32.Parse(split_Arr[6]),
-                                    PremVolume = Int32.Parse(split_Arr[7]),
+                                    Open = split_Arr[1] != "" ? Double.Parse(split_Arr[1]) : 0,
+                                    Close = split_Arr[2] != "" ? Double.Parse(split_Arr[2]) : 0,
+                                    Nite = split_Arr[3] != "" ? Double.Parse(split_Arr[3]) : 0,
+                                    NitePercent = split_Arr[4] != "" ? Double.Parse(split_Arr[4]) : 0,
+                                    ImbNY = split_Arr[5] != "" ? Int32.Parse(split_Arr[5]) : 0,
+                                    ImbEx = split_Arr[6] != "" ? Int32.Parse(split_Arr[6]) : 0,
+                                    PremVolume = split_Arr[7] != "" ? Int32.Parse(split_Arr[7]) : 0,
                                     Date = file_date
                                 });
                             }
@@ -193,19 +190,16 @@ namespace TotalStat
                     else
                     {
                         error_input = true;
-                    }
-                    if (selectfile && !error_input)
-                    {
-                        MessageBox.Show("Обновление DATA за " + date + " завершено успешно!");
-                    }
-                }
-                DataRefreshButton.IsEnabled = true;
+                    }                    
+                }                
                 GetDataLastRefreshDate();
             }
+            CurrentStatusBar.Text = "Обновление завершено!";
+            ButtonControlDataTab(true);
         }
         private async void Data_DeleteDate_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DataDeleteDateButton.IsEnabled = false;
+            ButtonControlDataTab(false);
             DateTime date = new DateTime();
             bool dataerror = false;
             if ((DataDeleteDateDay.Text != "") && (DataDeleteDateMonth.Text != "") && (DataDeleteDateYear.Text != ""))
@@ -214,6 +208,7 @@ namespace TotalStat
                 {
                     date = new DateTime(Int32.Parse(DataDeleteDateYear.Text), Int32.Parse(DataDeleteDateMonth.Text),
                         Int32.Parse(DataDeleteDateDay.Text));
+                    CurrentStatusBar.Text = "Удаление: " + date.Date.ToString();
                 }
                 catch (Exception ex)
                 {
@@ -240,12 +235,13 @@ namespace TotalStat
             {
                 MessageBox.Show("Введите корректную дату!");
             }
-            DataDeleteDateButton.IsEnabled = true;
+            ButtonControlDataTab(true);
+            CurrentStatusBar.Text = "Удаление завершено!";
             GetDataLastRefreshDate();
         }
         private async void Data_AddData_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DataAddDataButton.IsEnabled = false;
+            ButtonControlDataTab(false);
             ScreenContext db = new ScreenContext();
             string text_textbox = DataAddDataTextBox.Text;
             string[] arr = text_textbox.Split('\n');
@@ -258,7 +254,11 @@ namespace TotalStat
             {
                 error_input = true;
                 MessageBox.Show("Сегодняшняя дата: " + today + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
-            }            
+            }
+            else
+            {
+                CurrentStatusBar.Text = "Добавление: " + today.Date.ToString();
+            }
             if(!error_input)
             {
                 foreach(string newsplit in arr)
@@ -310,9 +310,10 @@ namespace TotalStat
             }
             if(!error_input)
             {
-                MessageBox.Show("Обновление DATA за " + today + " завершено успешно!");
+                MessageBox.Show("Обновление DATA за " + today + " завершено успешно!");                
             }
-            DataAddDataButton.IsEnabled = true;
+            CurrentStatusBar.Text = "Добавление завершено!";
+            ButtonControlDataTab(true);
             GetDataLastRefreshDate();
         }
 
@@ -329,7 +330,7 @@ namespace TotalStat
         }
         private async void Finviz_Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            FinvizRefreshButton.IsEnabled = false;
+            ButtonControlStockInfoTab(false);
             DescriptionContext db = new DescriptionContext();
             string path = FinvizFilePath.Text;
             string line;
@@ -395,7 +396,7 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            FinvizRefreshButton.IsEnabled = true;
+            ButtonControlStockInfoTab(true);
         }
 
         private void About_FileDialog_Execute(object sender, ExecutedRoutedEventArgs e)
@@ -411,7 +412,7 @@ namespace TotalStat
         }
         private async void About_Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            AboutRefreshButton.IsEnabled = false;
+            ButtonControlStockInfoTab(false);
             BusinessContext db = new BusinessContext();
             string path = AboutFilePath.Text;
             string line;
@@ -471,15 +472,13 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            AboutRefreshButton.IsEnabled = true;
+            ButtonControlStockInfoTab(true);
         }
 
         private async void Sector_AddSector_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            SectorAddFirstLevelButton.IsEnabled = false;
-            SectorAddSecondLevelButton.IsEnabled = false;
-            SectorAddThirdLevelButton.IsEnabled = false;
-            
+            ButtonControlStockInfoTab(false);
+
             SectorContext db = new SectorContext();
             string text = SectorAddSectorTextBox.Text;
             string[] split_lines = text.Split('\n');
@@ -563,9 +562,7 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            SectorAddFirstLevelButton.IsEnabled = true;
-            SectorAddSecondLevelButton.IsEnabled = true;
-            SectorAddThirdLevelButton.IsEnabled = true;
+            ButtonControlStockInfoTab(true);
         }
 
         private void Report_FileDialog_Execute(object sender, ExecutedRoutedEventArgs e)
@@ -581,7 +578,7 @@ namespace TotalStat
         }
         private async void Report_Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            ReportRefreshButton.IsEnabled = false;
+            ButtonControlReportsTab(false);
             ReportContext db = new ReportContext();
             string path = ReportFilePath.Text;
             string line;
@@ -667,13 +664,11 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            ReportRefreshButton.IsEnabled = true;
+            ButtonControlReportsTab(true);
         }
         private async void Report_AddReport_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            ReportAddYesterdayReportButton.IsEnabled = false;
-            ReportAddTodayReportButton.IsEnabled = false;
-            ReportAddTomorrowReportButton.IsEnabled = false;
+            ButtonControlReportsTab(false);
             ReportContext db = new ReportContext();
             string text = ReportAddReportTextBox.Text;
             string[] arr = text.Split('\n');
@@ -762,13 +757,11 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            ReportAddYesterdayReportButton.IsEnabled = true;
-            ReportAddTodayReportButton.IsEnabled = true;
-            ReportAddTomorrowReportButton.IsEnabled = true;
+            ButtonControlReportsTab(true);
         }
         private void Report_DeleteDate_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            ReportDeleteDateButton.IsEnabled = false;
+            ButtonControlReportsTab(false);
             DateTime date = new DateTime();
             bool dataerror = false;
             if ((ReportDeleteDateDay.Text != "") && (ReportDeleteDateMonth.Text != "") && (ReportDeleteDateYear.Text != ""))
@@ -803,7 +796,7 @@ namespace TotalStat
             {
                 MessageBox.Show("Введите корректную дату!");
             }
-            ReportDeleteDateButton.IsEnabled = true;
+            ButtonControlReportsTab(true);
         }
 
         private void Dividend_FileDialog_Execute(object sender, ExecutedRoutedEventArgs e)
@@ -819,7 +812,7 @@ namespace TotalStat
         }
         private async void Dividend_Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DividendRefreshButton.IsEnabled = false;
+            ButtonControlDividendsTab(false);
             DividendContext db = new DividendContext();
             string path = DividendFilePath.Text;
             string line = null;
@@ -905,14 +898,11 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            DividendRefreshButton.IsEnabled = true;
+            ButtonControlDividendsTab(true);
         }
         private async void Dividend_AddDiv_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DividendAddYesterdayDivButton.IsEnabled = false;
-            DividendAddTodayDivButton.IsEnabled = false;
-            DividendAddTomorrowDivButton.IsEnabled = false;
-                        
+            ButtonControlDividendsTab(false);                        
             DividendContext db = new DividendContext();
             string text = DividendAddDivTextBox.Text;
             string[] arr = text.Split('\n');
@@ -1004,13 +994,11 @@ namespace TotalStat
             {
                 MessageBox.Show("Обновление завершено успешно!");
             }
-            DividendAddYesterdayDivButton.IsEnabled = true;
-            DividendAddTodayDivButton.IsEnabled = true;
-            DividendAddTomorrowDivButton.IsEnabled = true;
+            ButtonControlDividendsTab(true);
         }
         private void Dividend_DeleteDate_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            DividendDeleteDateButton.IsEnabled = false;
+            ButtonControlDividendsTab(false);
             DateTime date = new DateTime();
             bool dataerror = false;
             if ((DividendDeleteDateDay.Text != "") && (DividendDeleteDateMonth.Text != "") && (DividendDeleteDateYear.Text != ""))
@@ -1045,7 +1033,7 @@ namespace TotalStat
             {
                 MessageBox.Show("Введите корректную дату!");
             }
-            DividendDeleteDateButton.IsEnabled = true;
+            ButtonControlDividendsTab(true);
         }
 
         private async void GetDataLastRefreshDate()
@@ -1065,5 +1053,36 @@ namespace TotalStat
                 }                         
             });            
         }        
+        private void ButtonControlDataTab(bool isenable)
+        {
+            DataRefreshButton.IsEnabled = isenable;
+            DataAddFileButton.IsEnabled = isenable;
+            DataRemoveFileButton.IsEnabled = isenable;
+            DataDeleteDateButton.IsEnabled = isenable;
+            DataAddDataButton.IsEnabled = isenable;
+        }
+        private void ButtonControlStockInfoTab(bool isenable)
+        {
+            FinvizRefreshButton.IsEnabled = isenable;
+            AboutRefreshButton.IsEnabled = isenable;
+            SectorAddFirstLevelButton.IsEnabled = isenable;
+            SectorAddSecondLevelButton.IsEnabled = isenable;
+            SectorAddThirdLevelButton.IsEnabled = isenable;
+        }
+        private void ButtonControlReportsTab(bool isenable)
+        {
+            ReportRefreshButton.IsEnabled = isenable;
+            ReportAddYesterdayReportButton.IsEnabled = isenable;
+            ReportAddTodayReportButton.IsEnabled = isenable;
+            ReportAddTomorrowReportButton.IsEnabled = isenable;
+        }
+        private void ButtonControlDividendsTab(bool isenable)
+        {
+            DividendRefreshButton.IsEnabled = isenable;
+            DividendAddYesterdayDivButton.IsEnabled = isenable;
+            DividendAddTodayDivButton.IsEnabled = isenable;
+            DividendAddTomorrowDivButton.IsEnabled = isenable;
+            DividendDeleteDateButton.IsEnabled = isenable;
+        }
     }
 }
