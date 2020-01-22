@@ -253,7 +253,7 @@ namespace TotalStat
             int line_error = 1;
             bool error_input = false;
             List<Screen> ScreenList = new List<Screen>();
-            var dates = db.Screens.FirstOrDefault(p => p.Date == today);            
+            var dates = db.Screens.FirstOrDefault(p => p.Date == today);
             if (dates != null)
             {
                 error_input = true;
@@ -513,6 +513,7 @@ namespace TotalStat
                             string sectorname;
                             split_spaces = split.Split(' ');
                             sectorname = String.Join(" ", split_spaces, 2, (split_spaces.Length - 2));
+                            sectorname = sectorname.Replace("\r", "");
                             SectorList.Add(new Sector
                             {
                                 Ticker = split_spaces[0],
@@ -718,15 +719,15 @@ namespace TotalStat
                     {
                         if(split != "")
                         {
-                            if (split.ToUpper() == "AFTER")
+                            string ticker = split.Replace("\r", "");
+                            if (ticker.ToUpper() == "AFTER")
                             {
                                 earningtime = "After Close";
-                            }
-                            string ticker = split.Replace("\r", "");
+                            }                            
                             ticker = ticker.ToUpper();
                             ReportList.Add(new Report { Ticker = ticker, EarningTime = earningtime, Date = datetosave });
                             line_error++;
-                        }                        
+                        }
                     }
                 }
                 catch (Exception ex)

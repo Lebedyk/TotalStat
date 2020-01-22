@@ -14,6 +14,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:WindowCommands.Report_AddFromApp" Executed="Report_AddFromApp_Execute"/>
         <CommandBinding Command="local:WindowCommands.Business_Show" Executed="Business_Show_Execute"/>
+        <CommandBinding Command="local:WindowCommands.Link" Executed="Link_Execute"/>
     </Window.CommandBindings>
 
     <Window.Resources>
@@ -148,7 +149,8 @@
                         <ToolTip>Stock businness</ToolTip>
                     </Button.ToolTip>
                 </Button>
-                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource linkImg}">
+                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource linkImg}"
+                        Command="local:WindowCommands.Link">
                     <Button.ToolTip>
                         <ToolTip>Link</ToolTip>
                     </Button.ToolTip>
@@ -242,7 +244,7 @@
             <StackPanel Grid.Column="1" >
                 <GroupBox BorderBrush="Black" Margin="3,-1,3,-1">
                     <GroupBox.Header>
-                        <TextBlock Text="{Binding FirstSectorForView[0].SectorName, FallbackValue=Sector 1}" FontSize="7" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding FirstSectorName, FallbackValue=Sector 1}" FontSize="7" FontWeight="Bold"/>
                     </GroupBox.Header>
                     <ListBox ItemsSource="{Binding Path = FirstSectorForView}" HorizontalAlignment="Left">                        
                         <ListBox.ItemTemplate>
@@ -255,7 +257,7 @@
                 </GroupBox>
                 <GroupBox BorderBrush="Black" Margin="2,-1,3,-1">
                     <GroupBox.Header>
-                        <TextBlock Text="{Binding SecondSectorForView[0].SectorName, FallbackValue=Sector 2}" FontSize="7" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SecondSectorName, FallbackValue=Sector 2}" FontSize="7" FontWeight="Bold"/>
                     </GroupBox.Header>
                     <ListBox ItemsSource="{Binding Path = SecondSectorForView}"  HorizontalAlignment="Left">
                         <ListBox.ItemTemplate>
@@ -268,7 +270,7 @@
                 </GroupBox>
                 <GroupBox BorderBrush="Black" Margin="2,-1,3,-1">
                     <GroupBox.Header>
-                        <TextBlock Text="{Binding ThirdSectorForView[0].SectorName, FallbackValue=Sector 3}" FontSize="7" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding ThirdSectorName, FallbackValue=Sector 3}" FontSize="7" FontWeight="Bold"/>
                     </GroupBox.Header>
                     <ListBox ItemsSource="{Binding Path = ThirdSectorForView}"  HorizontalAlignment="Left">
                         <ListBox.ItemTemplate>

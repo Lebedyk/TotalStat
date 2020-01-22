@@ -236,8 +236,8 @@
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
                     <Separator Margin="5,15,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Сектора</TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="SectorAddSectorTextBox" Height="150" Width="230" Margin="20,5,5,10" AcceptsReturn="True"
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBox x:Name="SectorAddSectorTextBox" Height="140" Width="230" Margin="20,5,5,10" AcceptsReturn="True"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <TextBox.ToolTip>
                                 <StackPanel>

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TotalStat
 {
@@ -34,12 +38,21 @@ namespace TotalStat
         private ObservableCollection<Sector> firstsectorforview = new ObservableCollection<Sector>();
         private ObservableCollection<Sector> secondsectorforview = new ObservableCollection<Sector>();
         private ObservableCollection<Sector> thirdsectorforview = new ObservableCollection<Sector>();
+        private string firstsectorname;
+        private string secondsectorname;
+        private string thirdsectorname;
+
         private static List<Report> actualreports = new List<Report>();
         private string reportforview;
         private string divforview;
         private string firststocktextboxstring;
         private string secondstocktextboxstring;
         private Description desc;
+
+        public DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer timer_recheck = new DispatcherTimer();
+        private string link_window_text;
+        IntPtr Hwnd;
 
         public List<Sector> SectorBase
         {
@@ -95,6 +108,7 @@ namespace TotalStat
                 SetDiv();
                 SetDesc();
                 WorkData = new WorkWithData(FirstStockTextBoxString, SecondStockTextBoxString, database);
+                OnPropertyChanged("FirstStockTextBoxString");
             }
         }
         public string SecondStockTextBoxString
@@ -139,12 +153,27 @@ namespace TotalStat
             get { return thirdsectorforview; }
             set { thirdsectorforview = value; }
         }
+        public string FirstSectorName
+        {
+            get { return firstsectorname; }
+            set { firstsectorname = value; }
+        }
+        public string SecondSectorName
+        {
+            get { return secondsectorname; }
+            set { secondsectorname = value; }
+        }
+        public string ThirdSectorName
+        {
+            get { return thirdsectorname; }
+            set { thirdsectorname = value; }
+        }
         public static List<Report> ActualReports
         {
             get { return actualreports; }
             set { actualreports = value; }
-        }
-
+        }        
+        
         public AppWindow()
         {            
             InitializeComponent();
@@ -164,7 +193,9 @@ namespace TotalStat
             SetDesc();
             ActualReports = GetActualReports();
             WorkData = new WorkWithData(FirstStockTextBoxString, SecondStockTextBoxString, database);            
-        }
+        }       
+
+        
         private void AppWindow_Closed(object sender, EventArgs e)
         {            
             App.Current.MainWindow.Visibility = Visibility.Visible;
@@ -201,6 +232,9 @@ namespace TotalStat
             FirstSectorForView.Clear();
             SecondSectorForView.Clear();
             ThirdSectorForView.Clear();
+            FirstSectorName = null;
+            SecondSectorName = null;
+            ThirdSectorName = null;
             var first = SectorBase.Where(p => p.SectorLevel == 1).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
             var second = SectorBase.Where(p => p.SectorLevel == 2).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
             var third = SectorBase.Where(p => p.SectorLevel == 3).FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
@@ -212,7 +246,8 @@ namespace TotalStat
                     foreach(Sector temp in firstsector)
                     {
                         FirstSectorForView.Add(temp);
-                    }                   
+                    }
+                    FirstSectorName = FirstSectorForView[0].SectorName;
                 }
             }
             if (second != null)
@@ -224,6 +259,7 @@ namespace TotalStat
                     {
                         SecondSectorForView.Add(temp);
                     }
+                    SecondSectorName = SecondSectorForView[0].SectorName;
                 }
             }
             if (third != null)
@@ -235,6 +271,7 @@ namespace TotalStat
                     {
                         ThirdSectorForView.Add(temp);
                     }
+                    ThirdSectorName = ThirdSectorForView[0].SectorName;
                 }
             }
         }
@@ -442,6 +479,42 @@ namespace TotalStat
             {
                 MessageBox.Show(temp.Biz, temp.Ticker);
             }
-        }                
-    }
+        }
+
+        
+
+
+        private void Link_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            timer.Tick += new EventHandler(timer_TickLink);
+            timer.Interval = new TimeSpan(0, 0, 3);
+            timer.Start();
+
+            //TimerCallback link = new TimerCallback(SetLink);
+            //Timer timerforlink = new Timer(link, null, 2000, -1);
+
+
+            //TimerCallback checkchanges = new TimerCallback(RecheckedLink);
+            //Timer timerforcheck = new Timer(checkchanges, null, 0, 500);
+        }
+        private void timer_TickLink(object sender, EventArgs e)
+        {
+            Hwnd = Link.GetHwnd();
+            link_window_text = Link.GetText(Hwnd);
+            FirstStockTextBoxString = Link.GetTicker(link_window_text);
+            timer.Stop();
+
+            timer_recheck.Tick += new EventHandler(timer_Tick_Link_Rechecked);
+            timer_recheck.Interval = new TimeSpan(0, 0, 1);
+            timer_recheck.Start();
+        }
+        private void timer_Tick_Link_Rechecked(object sender, EventArgs e)
+        {            
+            if (link_window_text != Link.GetText(Hwnd))
+            {
+                link_window_text = Link.GetText(Hwnd);
+                FirstStockTextBoxString = Link.GetTicker(link_window_text);
+            }
+        }        
+    }    
 }

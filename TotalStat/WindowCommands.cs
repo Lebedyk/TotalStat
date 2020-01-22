@@ -40,6 +40,8 @@ namespace TotalStat
 
             Report_AddFromApp = new RoutedCommand("Report_AddFromApp", typeof(AppWindow));
             Business_Show = new RoutedCommand("Business_Show", typeof(AppWindow));
+
+            Link = new RoutedCommand("Link", typeof(AppWindow));
         }
 
         public static RoutedCommand OpenWindow { get; set; }       
@@ -72,6 +74,8 @@ namespace TotalStat
 
         public static RoutedCommand Report_AddFromApp { get; set; }
         public static RoutedCommand Business_Show { get; set; }
+
+        public static RoutedCommand Link { get; set; }
 
     }
 }
