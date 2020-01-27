@@ -5,79 +5,40 @@ using System.Linq;
 
 namespace TotalStat
 {
-    public class DataforDataGrid
+    public class DataForDataGrid
     {
         public DateTime Date { get; set; }
         public double FirstNitePercent { get; set; }
         public double SecondNitePercent { get; set; }
         public double DeltaNite { get; set; }
         public int FirstPremVol { get; set; }
-    }
-    public class WorkWithData
-    {
-        private string firstticker;
-        private string secondticker;
-        private double beta;
-        private double hvbeta;
-        private double correlation;
-        private int avgpremvol;
-        private List<List<Screen>> alldatesscreens;
-        private ObservableCollection<Screen> selectfirststockscreens = new ObservableCollection<Screen>();
-        private ObservableCollection<Screen> selectsecondstockscreens = new ObservableCollection<Screen>();
-        private List<DataforDataGrid> datagrid = new List<DataforDataGrid>();        
 
-        public string FirstTicker 
+        public DataForDataGrid(DateTime date, double firstnitepercent, double secondnitepercent, int premvol)
         {
-            get { return firstticker; }
-            set { firstticker = value; }
+            this.Date = date;
+            this.FirstNitePercent = firstnitepercent;
+            this.SecondNitePercent = secondnitepercent;
+            this.DeltaNite = firstnitepercent - secondnitepercent;
+            this.FirstPremVol = premvol;
         }
-        public string SecondTicker
+    }
+    public class DataMath
+    {
+        public string FirstTicker { get; set; }
+        public string SecondTicker { get; set; }
+        public double Beta { get; set; }
+        public double HvBeta { get; set; }
+        public double Correlation { get; set; }
+        public int AvgPremVol { get; set; }
+        public List<List<Screen>> AllDatesScreens { get; set; }
+        public List<Screen> SelectFirstStockScreens { get; set; } = new List<Screen>();
+        public List<Screen> SelectSecondStockScreens { get; set; } = new List<Screen>();
+        public List<DataForDataGrid> DataGrid { get; set; } = new List<DataForDataGrid>();
+        public DataMath()
         {
-            get { return secondticker; }
-            set { secondticker = value; }
+
         }
-        public double Beta
-        {
-            get { return beta; }
-            set { beta = value; }
-        }
-        public double HvBeta
-        {
-            get { return hvbeta; }
-            set { hvbeta = value; }
-        }
-        public double Correlation
-        {
-            get { return correlation; }
-            set { correlation = value; }
-        }
-        public int AvgPremVol
-        {
-            get { return avgpremvol; }
-            set { avgpremvol = value; }
-        }
-        public List<List<Screen>> AllDatesScreens
-        {
-            get { return alldatesscreens; }
-            set { alldatesscreens = value; }
-        }
-        public ObservableCollection<Screen> SelectFirstStockScreens
-        {
-            get { return selectfirststockscreens; }
-            set { selectfirststockscreens = value; }
-        }
-        public ObservableCollection<Screen> SelectSecondStockScreens
-        {
-            get { return selectsecondstockscreens; }
-            set { selectsecondstockscreens = value; }
-        }
-        public List<DataforDataGrid> DataGrid
-        {
-            get { return datagrid; }
-            set { datagrid = value;
-                    }
-        }
-        public WorkWithData(string firstticker, string secondticker,  List<List<Screen>> alldatesscreens)
+        public DataMath(string firstticker, string secondticker, List<List<Screen>> alldatesscreens)
         {
             this.FirstTicker = firstticker;
             this.SecondTicker = secondticker;
@@ -90,90 +51,85 @@ namespace TotalStat
         }
         private void SetSelectStockScreens()
         {
-            foreach(List<Screen> onedate in AllDatesScreens)
-            {                
-                var temp1 = onedate.Where(p => p.Ticker == FirstTicker).FirstOrDefault();
-                var temp2 = onedate.Where(p => p.Ticker == SecondTicker).FirstOrDefault();
-                if ((temp1 != null) && (temp2 != null))
+            if(AllDatesScreens != null)
+            {
+                foreach (List<Screen> onedate in AllDatesScreens)
                 {
-                    SelectFirstStockScreens.Add(temp1);
-                    SelectSecondStockScreens.Add(temp2);                    
+                    var temp1 = onedate.Where(p => p.Ticker == FirstTicker).FirstOrDefault();
+                    var temp2 = onedate.Where(p => p.Ticker == SecondTicker).FirstOrDefault();
+                    if ((temp1 != null) && (temp2 != null))
+                    {
+                        SelectFirstStockScreens.Add(temp1);
+                        SelectSecondStockScreens.Add(temp2);
+                    }
+                    else if ((temp1 == null) && (temp2 != null))
+                    {
+                        SelectFirstStockScreens.Add(new Screen { Id = 0, Date = temp2.Date });
+                        SelectSecondStockScreens.Add(temp2);
+                    }
+                    else if ((temp1 != null) && (temp2 == null))
+                    {
+                        SelectFirstStockScreens.Add(temp1);
+                        SelectSecondStockScreens.Add(new Screen { Id = 0, Date = temp1.Date });
+                    }
+                    else
+                    {
+                        SelectFirstStockScreens.Add(new Screen { Id = 0, Date = onedate[0].Date });
+                        SelectSecondStockScreens.Add(new Screen { Id = 0, Date = onedate[0].Date });
+                    }
                 }
-                else if((temp1 == null) && (temp2 != null))
-                {
-                    SelectFirstStockScreens.Add(new Screen { Id = 0, Date = temp2.Date });
-                    SelectSecondStockScreens.Add(temp2);
-                }
-                else if((temp1 != null) && (temp2 == null))
-                {
-                    SelectFirstStockScreens.Add(temp1);
-                    SelectSecondStockScreens.Add(new Screen { Id = 0, Date = temp1.Date });
-                }
-                else
-                {
-                    SelectFirstStockScreens.Add(new Screen { Id = 0, Date = onedate[0].Date });
-                    SelectSecondStockScreens.Add(new Screen { Id = 0, Date = onedate[0].Date });
-                }
-            }            
+            }                        
         } 
         private void SetDataGrid()
         {
             DataGrid = SelectFirstStockScreens.Join(SelectSecondStockScreens, f => f.Date, s => s.Date,
-                                                    (f, s) => new DataforDataGrid
-                                                    {
-                                                        Date = f.Date,
-                                                        FirstNitePercent = f.NitePercent,
-                                                        SecondNitePercent = s.NitePercent,
-                                                        DeltaNite = (f.NitePercent - s.NitePercent),
-                                                        FirstPremVol = f.PremVolume
-                                                    }).ToList();
+                                              (f, s) => new DataForDataGrid(f.Date, f.NitePercent, s.NitePercent, f.PremVolume)).ToList();                                                    
             DataGrid.Reverse();
         }
         private void SetBetaHvBeta()
         {
-            double dirtybeta;
-            double clearbeta;
-            double clearhvbeta;
-            List<double> dirtybetalist = new List<double>();
-            List<double> clearbetalist = new List<double>();
-            List<double> hvbetalist = new List<double>();
-            List<double> clearhvbetalist = new List<double>();
+            double dirtyBeta;
+            double clearBeta;
+            double clearHvBeta;
+            List<double> dirtyBetaList = new List<double>();
+            List<double> clearBetaList = new List<double>();
+            List<double> hvBetaList = new List<double>();
+            List<double> clearHvBetaList = new List<double>();
 
             for (int i = 0; i < SelectFirstStockScreens.Count(); i++)
             {
-                if(SelectFirstStockScreens[i].Id != 0 && SelectSecondStockScreens[i].Id != 0)
+                if (SelectFirstStockScreens[i].Id != 0 && SelectSecondStockScreens[i].Id != 0)
                 {
-                    if(((SelectFirstStockScreens[i].NitePercent > 0) && (SelectSecondStockScreens[i].NitePercent > 0)) ||
+                    if (((SelectFirstStockScreens[i].NitePercent > 0) && (SelectSecondStockScreens[i].NitePercent > 0)) ||
                         ((SelectFirstStockScreens[i].NitePercent < 0) && (SelectSecondStockScreens[i].NitePercent < 0)))
                     {
-                        double temporarybeta = SelectFirstStockScreens[i].NitePercent / SelectSecondStockScreens[i].NitePercent;
-                        dirtybetalist.Add(temporarybeta);
+                        double temporaryBeta = SelectFirstStockScreens[i].NitePercent / SelectSecondStockScreens[i].NitePercent;
+                        dirtyBetaList.Add(temporaryBeta);
                         if((SelectSecondStockScreens[i].NitePercent > 0.35) || (SelectSecondStockScreens[i].NitePercent < -0.35))
                         {
-                            hvbetalist.Add(temporarybeta);
+                            hvBetaList.Add(temporaryBeta);
                         }
                     }
-                    else if((SelectFirstStockScreens[i].NitePercent == 0) || (SelectSecondStockScreens[i].NitePercent == 0))
+                    else if ((SelectFirstStockScreens[i].NitePercent == 0) || (SelectSecondStockScreens[i].NitePercent == 0))
                     {
-                        dirtybetalist.Add(1);
+                        dirtyBetaList.Add(1);
                     }
                 }
-            }
-            
-            dirtybeta = dirtybetalist.Count()>0?dirtybetalist.Average():0;
-            clearbetalist = dirtybetalist.Where(p => p < (dirtybeta * 2.5)).ToList();
-            clearbeta = clearbetalist.Count() > 0 ? clearbetalist.Average() : 0;
-            clearhvbetalist = hvbetalist.Where(p => p < (clearbeta * 3)).ToList();
-            clearhvbeta = clearhvbetalist.Count() > 0 ? clearhvbetalist.Average() : 0;
-            HvBeta = clearhvbeta;
-            Beta = clearbeta;
+            }            
+            dirtyBeta = dirtyBetaList.Count()>0?dirtyBetaList.Average():0;
+            clearBetaList = dirtyBetaList.Where(p => p < (dirtyBeta * 2.5)).ToList();
+            clearBeta = clearBetaList.Count() > 0 ? clearBetaList.Average() : 0;
+            clearHvBetaList = hvBetaList.Where(p => p < (clearBeta * 3)).ToList();
+            clearHvBeta = clearHvBetaList.Count() > 0 ? clearHvBetaList.Average() : 0;
+            HvBeta = clearHvBeta;
+            Beta = clearBeta;
         }
         private void SetCorrelation()
         {
             int count = 0;
             for (int i = 0; i < SelectFirstStockScreens.Count(); i++)
             {
-                if (SelectFirstStockScreens[i].Id != 0 && SelectSecondStockScreens[i].Id != 0)
+                if ((SelectFirstStockScreens[i].Id != 0) && (SelectSecondStockScreens[i].Id != 0))
                 {
                     if (((SelectFirstStockScreens[i].NitePercent > 0) && (SelectSecondStockScreens[i].NitePercent > 0)) ||
                         ((SelectFirstStockScreens[i].NitePercent < 0) && (SelectSecondStockScreens[i].NitePercent < 0)))
@@ -188,17 +144,13 @@ namespace TotalStat
             }
             if((SelectFirstStockScreens.Count()>0) && (count >0))
             {
-                Correlation = SelectFirstStockScreens.Count() / count;
+                Correlation = (double)count / (double)SelectFirstStockScreens.Count();
             }
             else { Correlation = 0; }
         }
         private void SetAveragePremarketVolume()
         {
-            if(SelectFirstStockScreens.Count() > 0)
-            {
-                AvgPremVol = (int)SelectFirstStockScreens.Average(p => p.PremVolume);
-            }
-            else { AvgPremVol = 0; }
+            AvgPremVol = SelectFirstStockScreens.Count() > 0 ? (int)SelectFirstStockScreens.Average(p => p.PremVolume) : 0;
         }
     }
 }

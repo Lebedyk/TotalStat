@@ -5,32 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
-        Top="{Binding Path = (local:AppConfiguration.RedactorWindowTop), Mode=TwoWay}" 
-        Left="{Binding Path = (local:AppConfiguration.RedactorWindowLeft), Mode=TwoWay}"
+        Top="{Binding Path = (local:AppSizeGeometry.RedactorWindowTop), Mode=TwoWay}" 
+        Left="{Binding Path = (local:AppSizeGeometry.RedactorWindowLeft), Mode=TwoWay}"
         Title="RedactorWindow" Height="520" Width="400">
-    <Window.CommandBindings>
-        <CommandBinding Command="local:WindowCommands.Data_FileDialog" Executed="Data_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Data_Remove" Executed="Data_Remove_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Data_Refresh" Executed="Data_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Data_DeleteDate" Executed="Data_DeleteDate_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Data_AddData" Executed="Data_AddData_Execute"/>
-
-        <CommandBinding Command="local:WindowCommands.Finviz_FileDialog" Executed="Finviz_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Finviz_Refresh" Executed="Finviz_Refresh_Execute"/>        
-        <CommandBinding Command="local:WindowCommands.About_FileDialog" Executed="About_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.About_Refresh" Executed="About_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Sector_AddSector" Executed="Sector_AddSector_Execute"/>
-
-        <CommandBinding Command="local:WindowCommands.Report_FileDialog" Executed="Report_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Report_Refresh" Executed="Report_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Report_AddReport" Executed="Report_AddReport_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Report_DeleteDate" Executed="Report_DeleteDate_Execute"/>
-        
-        <CommandBinding Command="local:WindowCommands.Dividend_FileDialog" Executed="Dividend_FileDialog_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Dividend_Refresh" Executed="Dividend_Refresh_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Dividend_AddDiv" Executed="Dividend_AddDiv_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Dividend_DeleteDate" Executed="Dividend_DeleteDate_Execute"/>
-    </Window.CommandBindings>
     
     <TabControl>        
         <TabItem>
@@ -56,7 +33,8 @@
                         <StatusBarItem>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Статус: " Margin="4,0,8,0" FontSize="10" FontStyle="Italic"></TextBlock>
-                                <TextBlock x:Name="CurrentStatusBar" FontSize="10" FontStyle="Italic" MinWidth="250"/>
+                                <TextBlock x:Name="CurrentStatusBar" FontSize="10" FontStyle="Italic" MinWidth="250"
+                                           Text="{Binding StatusBar}"/>
                             </StackPanel>                            
                         </StatusBarItem>
                         
@@ -71,7 +49,8 @@
                             <GroupBox.Header>
                                 <TextBlock Text="Файлы" FontWeight="Bold"/>
                             </GroupBox.Header>
-                            <ListBox x:Name="SelectedItems_ListBox" ItemsSource="{Binding Path = ChoosenFiles}">
+                            <ListBox x:Name="SelectedItems_ListBox" ItemsSource="{Binding Path = ChoosenFiles}" 
+                                        SelectedItem="{Binding SelectedFile, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Name}"/>
@@ -88,14 +67,16 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="DataAddFileButton" Grid.Row="0" Command="local:WindowCommands.Data_FileDialog">
-                                <StackPanel Orientation="Horizontal">
+                            <Button x:Name="DataAddFileButton" Grid.Row="0" Command="{Binding DataFileDialogCommand}"
+                                    IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                <StackPanel Orientation="Horizontal" >
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Добавить</TextBlock>
                                 </StackPanel>
                                 <Button.ToolTip>Добавить файлы</Button.ToolTip>
                             </Button>
-                            <Button x:Name="DataRemoveFileButton" Grid.Row="1" Command="local:WindowCommands.Data_Remove">
+                            <Button x:Name="DataRemoveFileButton" Grid.Row="1" Command="{Binding DataRemoveCommand}"
+                                    IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\delete.png" MaxHeight="17"/>
                                     <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -125,7 +106,8 @@
                         </StackPanel>
 
                         <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" Height="65" Width="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                 FontWeight="Bold" FontSize="12" Margin="4,10,5,10" Command="local:WindowCommands.Data_Refresh">
+                                 FontWeight="Bold" FontSize="12" Margin="4,10,5,10" Command="{Binding DataRefreshCommand}"
+                                IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
                                 <Image Source="Image\refresh.png" MaxHeight="35"/>
@@ -135,19 +117,22 @@
                         <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" 
                        Text="Последнее обновление:" TextWrapping="Wrap" FontStyle="Oblique" Margin="2,5,0,5"/>
                         <TextBlock x:Name="DataLastRefreshTextBlock" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Height="16" Margin="5" FontWeight="Bold" Text="{Binding lastUPDATE}" />
+                       Height="16" Margin="5" FontWeight="Bold" Text="{Binding LastUpdate}" />
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="6,20,10,15" Height="43" HorizontalAlignment="Center">
                             <TextBlock FontSize="12" FontWeight="Bold"  TextAlignment="Center">Удалить день:</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>День</TextBlock>
-                                <TextBox x:Name="DataDeleteDateDay" MaxHeight="20" Width="23" Margin="2" />
+                                <TextBox x:Name="DataDeleteDateDay" MaxHeight="20" Width="23" Margin="2" 
+                                         Text="{Binding DataDeleteDateDay, Mode=OneWayToSource}"/>
                                 <TextBlock>Месяц</TextBlock>
-                                <TextBox x:Name="DataDeleteDateMonth" MaxHeight="20" Width="23" Margin="2" />
+                                <TextBox x:Name="DataDeleteDateMonth" MaxHeight="20" Width="23" Margin="2" 
+                                         Text="{Binding DataDeleteDateMonth, Mode=OneWayToSource}"/>
                                 <TextBlock>Год</TextBlock>
-                                <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="2"/>
+                                <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="2"
+                                         Text="{Binding DataDeleteDateYear, Mode=OneWayToSource}"/>
                                 <Button x:Name="DataDeleteDateButton" MaxHeight="20" Margin="3,0,0,0" 
-                                        Command="local:WindowCommands.Data_DeleteDate">
+                                        Command="{Binding DataDeleteDateCommand}" IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="Image\delete.png"/>
                                         <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -168,7 +153,8 @@
                         </TextBlock>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBox x:Name="DataAddDataTextBox" Height="100" Width="250" Margin="15,5,5,5" AcceptsReturn="True"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     Text="{Binding DataAddDataTextBox, Mode=OneWayToSource}">
                                 <TextBox.ToolTip>
                                     <StackPanel>
                                         <TextBlock>Ticker Open Close Nite NitePercent ImbNY ImbEX PremVol</TextBlock>
@@ -179,7 +165,7 @@
                                 </TextBox.ToolTip>
                             </TextBox>
                             <Button x:Name="DataAddDataButton" Height="55" Width="70" Margin="8,20,20,20" 
-                                Command="local:WindowCommands.Data_AddData">
+                                Command="{Binding DataAddDataCommand}" IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontWeight="Bold">Добавить</TextBlock>
                                     <Image Source="Image\add.png" Width="35"/>                                    
@@ -207,13 +193,14 @@
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>                    
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="FinvizFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10, 0,0,0"/>
+                        <TextBox x:Name="FinvizFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10, 0,0,0"
+                                 Text="{Binding FinvizFilePath, Mode=TwoWay}"/>
                         <Button x:Name="FinvizAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                                Command="local:WindowCommands.Finviz_FileDialog">
+                                Command="{Binding FinvizFileDialogCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>
                         </Button>
                         <Button x:Name="FinvizRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0" 
-                                Command="local:WindowCommands.Finviz_Refresh">                            
+                                Command="{Binding FinvizRefreshCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">                            
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\refresh.png"/>
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
@@ -229,13 +216,14 @@
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="AboutFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10,0,0,0"/>
+                        <TextBox x:Name="AboutFilePath" Width="230" HorizontalAlignment="Right" TextAlignment="Justify" Margin="10,0,0,0"
+                                 Text="{Binding AboutFilePath, Mode=TwoWay}"/>
                         <Button x:Name="AboutAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                                Command="local:WindowCommands.About_FileDialog">
+                                Command="{Binding AboutFileDialogCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>
                         </Button>
                         <Button x:Name="AboutRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0"
-                                Command="local:WindowCommands.About_Refresh">
+                                Command="{Binding AboutRefreshCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\refresh.png"/>
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
@@ -248,7 +236,8 @@
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Сектора</TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <TextBox x:Name="SectorAddSectorTextBox" Height="140" Width="230" Margin="20,5,5,10" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding SectorAddSectorTextBox, Mode=OneWayToSource}">
                             <TextBox.ToolTip>
                                 <StackPanel>
                                     <TextBlock>Ticker MarketCap Sector </TextBlock>
@@ -260,15 +249,15 @@
                         </TextBox>
                         <StackPanel Orientation="Vertical" MinWidth="110" Margin="5,5,3,3">
                             <Button x:Name="SectorAddFirstLevelButton" Content="Первый уровень" MinHeight="30" MinWidth="5" Margin="0,3,0,3" 
-                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                FontWeight="Bold" Command="{Binding SectorAddFirstSectorCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                                 <Button.ToolTip>Обновляет сектор 1 уровня</Button.ToolTip>
                             </Button>
                             <Button x:Name="SectorAddSecondLevelButton" Content="Второй уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
-                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                FontWeight="Bold" Command="{Binding SectorAddSecondSectorCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                                 <Button.ToolTip>Обновляет сектор 2 уровня</Button.ToolTip>
                             </Button>
                             <Button x:Name="SectorAddThirdLevelButton" Content="Третий уровень" MinHeight="30" MinWidth="40" Margin="0,3,0,3" 
-                                FontWeight="Bold" Command="local:WindowCommands.Sector_AddSector">
+                                FontWeight="Bold" Command="{Binding SectorAddThirdSectorCommand}" IsEnabled="{Binding InfoButtonsIsEnable, Mode=TwoWay}">
                                 <Button.ToolTip>Обновляет сектор 3 уровня</Button.ToolTip>
                             </Button>
                         </StackPanel>
@@ -291,13 +280,14 @@
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="ReportFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Justify" Margin="15,0,0,0"/>
+                        <TextBox x:Name="ReportFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Justify" Margin="15,0,0,0"
+                                 Text="{Binding ReportFilePath, Mode=TwoWay}"/>
                         <Button x:Name="ReportAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left" 
-                        Command="local:WindowCommands.Report_FileDialog">
+                        Command="{Binding ReportFileDialogCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>
                         </Button>
                         <Button x:Name="ReportRefreshButton"  MinWidth="60" Height="20" Margin="20,0,0,0"
-                                Command="local:WindowCommands.Report_Refresh">
+                                Command="{Binding ReportRefreshCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\refresh.png"/>
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
@@ -312,7 +302,8 @@
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление репортов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <TextBox x:Name="ReportAddReportTextBox" Height="95" Width="200" Margin="15,5,5,5" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding ReportAddReportTextBox, Mode=OneWayToSource}">
                             <TextBox.ToolTip>
                                 <StackPanel>
                                     <TextBlock>Ticker</TextBlock>
@@ -326,7 +317,7 @@
                         </TextBox>
                         <StackPanel Orientation="Vertical">
                             <Button x:Name="ReportAddYesterdayReportButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
-                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                 FontWeight="Bold" Command="{Binding ReportAddYesterdayReportCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Вчера</TextBlock>
@@ -334,7 +325,7 @@
                                 <Button.ToolTip>Добавить репорты за вчера</Button.ToolTip>
                             </Button>
                             <Button x:Name="ReportAddTodayReportButton" Height="25" MinWidth="40" Margin="8,5,5,5" 
-                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                 FontWeight="Bold" Command="{Binding ReportAddTodayReportCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Сегодня</TextBlock>
@@ -342,7 +333,7 @@
                                 <Button.ToolTip>Добавить репорты за сегодня</Button.ToolTip>
                             </Button>
                             <Button x:Name="ReportAddTomorrowReportButton" Height="25" MinWidth="40" Margin="8,5,5,5" 
-                                 FontWeight="Bold" Command="local:WindowCommands.Report_AddReport">
+                                 FontWeight="Bold" Command="{Binding ReportAddTomorrowReportCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Завтра</TextBlock>
@@ -358,13 +349,16 @@
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock>День</TextBlock>
-                        <TextBox x:Name="ReportDeleteDateDay" MaxHeight="20" Width="23" Margin="3" />
+                        <TextBox x:Name="ReportDeleteDateDay" MaxHeight="20" Width="23" Margin="3"
+                                 Text ="{Binding ReportDeleteDateDay, Mode=OneWayToSource}"/>
                         <TextBlock>Месяц</TextBlock>
-                        <TextBox x:Name="ReportDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" />
+                        <TextBox x:Name="ReportDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" 
+                                 Text ="{Binding ReportDeleteDateMonth, Mode=OneWayToSource}"/>
                         <TextBlock>Год</TextBlock>
-                        <TextBox x:Name="ReportDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
-                        <Button x:Name="ReportDeleteDateButton" MaxHeight="20" Margin="8,0,0,0" 
-                                FontWeight="Bold" Command="local:WindowCommands.Report_DeleteDate">
+                        <TextBox x:Name="ReportDeleteDateYear" MaxHeight="20" Width="40" Margin="3"
+                                 Text ="{Binding ReportDeleteDateYear, Mode=OneWayToSource}"/>
+                        <Button x:Name="ReportDeleteDateButton" MaxHeight="20" Margin="8,0,0,0"
+                                FontWeight="Bold" Command="{Binding ReportDeleteDateCommand}" IsEnabled="{Binding ReportButtonsIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\delete.png"/>
                                 <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -392,11 +386,11 @@
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBox x:Name="DividendFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Right" Margin="15, 0,0,0"/>
                         <Button x:Name="DividendAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left"
-                        Command="local:WindowCommands.Dividend_FileDialog">
+                        Command="" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>
                         </Button>
                         <Button x:Name="DividendRefreshButton" MinWidth="60" Height="20" Margin="20,0,0,0"
-                        Command="local:WindowCommands.Dividend_Refresh">
+                        Command="{Binding DividendRefreshCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\refresh.png"/>
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
@@ -410,7 +404,8 @@
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление дивидендов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <TextBox x:Name="DividendAddDivTextBox" Height="95" Width="200" Margin="15,5,5,5" AcceptsReturn="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding DividendAddDivTextBox, Mode=OneWayToSource}">
                             <TextBox.ToolTip>
                                 <StackPanel>
                                     <TextBlock>Ticker Sum</TextBlock>
@@ -422,7 +417,7 @@
                         </TextBox>
                         <StackPanel Orientation="Vertical">
                             <Button x:Name="DividendAddYesterdayDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv">
+                                Command="{Binding DividendAddYesterdayDivCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Вчера</TextBlock>
@@ -430,7 +425,7 @@
                                 <Button.ToolTip>Добавить дивиденды за вчера</Button.ToolTip>
                             </Button>
                             <Button x:Name="DividendAddTodayDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv">
+                                Command="{Binding DividendAddTodayDivCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Сегодня</TextBlock>
@@ -438,7 +433,7 @@
                                 <Button.ToolTip>Добавить дивиденды за сегодня</Button.ToolTip>
                             </Button>
                             <Button x:Name="DividendAddTomorrowDivButton" Height="25" MinWidth="120" Margin="8,5,5,5" 
-                                Command="local:WindowCommands.Dividend_AddDiv">
+                                Command="{Binding DividendAddTomorrowDivCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Завтра</TextBlock>
@@ -452,13 +447,16 @@
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>                    
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock>День</TextBlock>
-                        <TextBox x:Name="DividendDeleteDateDay" MaxHeight="20" Width="23" Margin="3" />
+                        <TextBox x:Name="DividendDeleteDateDay" MaxHeight="20" Width="23" Margin="3" 
+                                 Text="{Binding DividendDeleteDateDay, Mode=OneWayToSource}"/>
                         <TextBlock>Месяц</TextBlock>
-                        <TextBox x:Name="DividendDeleteDateMonth" MaxHeight="20" Width="23" Margin="3" />
+                        <TextBox x:Name="DividendDeleteDateMonth" MaxHeight="20" Width="23" Margin="3"
+                                 Text="{Binding DividendDeleteDateMonth, Mode=OneWayToSource}"/>
                         <TextBlock>Год</TextBlock>
-                        <TextBox x:Name="DividendDeleteDateYear" MaxHeight="20" Width="40" Margin="3"/>
+                        <TextBox x:Name="DividendDeleteDateYear" MaxHeight="20" Width="40" Margin="3"
+                                 Text="{Binding DividendDeleteDateYear, Mode=OneWayToSource}"/>
                         <Button x:Name="DividendDeleteDateButton" MaxHeight="20" Margin="8,0,0,0" 
-                                Command="local:WindowCommands.Dividend_DeleteDate">
+                                Command="{Binding DividendDeleteDateCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Image\delete.png"/>
                                 <TextBlock FontWeight="Bold">Удалить</TextBlock>

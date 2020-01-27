@@ -6,12 +6,14 @@
         xmlns:local="clr-namespace:TotalStat"
         mc:Ignorable="d"
         Title="MainWindow" Height="300" Width="300">
-    <Window.CommandBindings>
-        <CommandBinding Command="local:WindowCommands.OpenWindow" Executed="OpenWindow_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Exit" Executed="Exit_Execute"/>
-        <CommandBinding Command="local:WindowCommands.FAQ" Executed="FAQ_Execute"/>
-    </Window.CommandBindings>
-    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BTV"/>
+    </Window.Resources>
+    <Window.Visibility>
+        <Binding Path="IsVisible" Converter="{StaticResource BTV}"
+                 Mode="TwoWay"/>
+    </Window.Visibility>
+
     <Grid>       
         <Grid.RowDefinitions>
             <RowDefinition Height="0.15*"/>
@@ -26,16 +28,17 @@
                         <Ellipse Height="10" Width="10" Fill="Black" Margin="0 0 5 0" />
                         <TextBlock>File</TextBlock>
                     </StackPanel>                    
-                </MenuItem.Header>
-                <MenuItem Header="Open File"/>
-                <MenuItem Header="Exit" Command="local:WindowCommands.Exit"/>
+                </MenuItem.Header>                
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="FAQ" Command="local:WindowCommands.FAQ"/>
-            </MenuItem>            
+                <MenuItem Header="FAQ" Command="{Binding OpenFAQ}"/>
+            </MenuItem>
         </Menu>
 
-        <Button x:Name="LoadApp" Width="200" Height="80" Content="Начать работу" Grid.Row="1" Command="local:WindowCommands.OpenWindow"/>
-        <Button x:Name="LoadRedactor" Width="200" Height="80" Content="Редактировать базу" Grid.Row="2" Command="local:WindowCommands.OpenWindow"/>
+        <Button x:Name="LoadApp" Width="200" Height="80" Content="Начать работу" Grid.Row="1"
+                Command="{Binding OpenAppWindowCommand}"/>
+        <Button x:Name="LoadRedactor" Width="200" Height="80" Content="Редактировать базу" Grid.Row="2" 
+                Command="{Binding OpenRedactorWindowCommand}"/>
     </Grid>     
 </Window>

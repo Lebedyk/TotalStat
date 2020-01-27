@@ -15,34 +15,34 @@ namespace TotalStat
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((double)value > 0)
-                return DarkGreenBrush;
-            else if((double)value < 0)
-                return DarkRedBrush;
-            else
             {
-                return DefaultBrush;
+                return DarkGreenBrush;
             }
+            else return (double)value < 0 ? DarkRedBrush : DefaultBrush;
         }
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
+                                                                                             throw new NotImplementedException();
     }
 
     public class ReportShowConverter : IValueConverter
     {
         public SolidColorBrush DarkRedBrush { get; set; }
         public SolidColorBrush DarkGreenBrush { get; set; }
-
         public SolidColorBrush DarkBlueBrush { get; set; }
         public SolidColorBrush DefaultBrush { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString() == "YAC" || value.ToString() == "ABO")
+            if (value.ToString() == Localize.YestAC || value.ToString() == Localize.TodayBO)
+            {
                 return DarkRedBrush;
-            else if ((value.ToString() == "YYBO") || (value.ToString() == "YYAC") || (value.ToString() == "YBO"))
+            }                
+            else if ((value.ToString() == Localize.DayBeforeYestBO) || (value.ToString() == Localize.DayBeforeYestAC) 
+                    || (value.ToString() == Localize.YestBO))
+            {
                 return DarkBlueBrush;
-            else if((value.ToString() == "AAC") || (value.ToString() == "TBO") || (value.ToString() == "TAC"))
+            }                
+            else if((value.ToString() == Localize.TodayAC) || (value.ToString() == Localize.TomorrowBO) 
+                    || (value.ToString() == Localize.TomorrowAC))
             {
                 return DarkGreenBrush;
             }
@@ -51,10 +51,8 @@ namespace TotalStat
                 return DefaultBrush;
             }
         }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
+                                                                                            throw new NotImplementedException();
     }
 
     public class DividendShowConverter : IValueConverter
@@ -63,18 +61,10 @@ namespace TotalStat
         public SolidColorBrush DefaultBrush { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString() != "")
-            {
-                return BlackBrush;
-            }                
-            {
-                return DefaultBrush;
-            }
+            return value.ToString() != "" ? BlackBrush : DefaultBrush;            
         }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
+                                                                                throw new NotImplementedException();
     }
 
     public class ReportInSectorConverter : IValueConverter
@@ -83,21 +73,10 @@ namespace TotalStat
         public SolidColorBrush DefaultBrush { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)        
         {            
-            var ololo = AppWindow.ActualReports.FirstOrDefault(p => p.Ticker == value.ToString());
-            
-            if(ololo != null)
-            {                
-                return DarkRedBrush;
-            }
-            else
-            {
-                return DefaultBrush;
-            }
+            var ololo = AppWindowViewModel.ActualReports.FirstOrDefault(p => p.Ticker == value.ToString());
+            return ololo != null ? DarkRedBrush : DefaultBrush;
         }
-            
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
+                                                                                throw new NotImplementedException();
     }
 }

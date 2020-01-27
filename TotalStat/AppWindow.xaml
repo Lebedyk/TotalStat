@@ -4,19 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TotalStat"
-        Top="{Binding Path = (local:AppConfiguration.AppWindowTop), Mode=TwoWay}" 
-        Left="{Binding Path = (local:AppConfiguration.AppWindowLeft), Mode=TwoWay}"
+        Top="{Binding Path = (local:AppSizeGeometry.AppWindowTop), Mode=TwoWay}" 
+        Left="{Binding Path = (local:AppSizeGeometry.AppWindowLeft), Mode=TwoWay}"
         mc:Ignorable="d"
-        Title="AppWindow" Height="{Binding Path=(local:AppConfiguration.AppWindowHeight), Mode=TwoWay, FallbackValue=450}" 
-                            Width="{Binding Path=(local:AppConfiguration.AppWindowWidth), Mode=TwoWay, FallbackValue=450}">
-    
+        Title="AppWindow" Height="{Binding Path=(local:AppSizeGeometry.AppWindowHeight), Mode=TwoWay, FallbackValue=450}" 
+                            Width="{Binding Path=(local:AppSizeGeometry.AppWindowWidth), Mode=TwoWay, FallbackValue=450}">    
    
-    <Window.CommandBindings>
-        <CommandBinding Command="local:WindowCommands.Report_AddFromApp" Executed="Report_AddFromApp_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Business_Show" Executed="Business_Show_Execute"/>
-        <CommandBinding Command="local:WindowCommands.Link" Executed="Link_Execute"/>
-    </Window.CommandBindings>
-
+    
     <Window.Resources>
         <Image x:Key="pointerImg" Source="Image/pointer.png"/>
         <Image x:Key="linkImg" Source="Image/link.png"/>
@@ -117,7 +111,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" DataContext="{Binding WorkData}" Margin="2">
+        <Grid Grid.Row="1" Margin="2">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -129,28 +123,29 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                 <TextBlock Text="Beta: " FontSize="11"/>
-                <TextBlock Text="{Binding Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding WorkData.Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
                 <TextBlock Text="Correlation: " FontSize="11"/>
-                <TextBlock Text="{Binding Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding WorkData.Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
                 <TextBlock Text="HvBeta: " FontSize="11"/>
-                <TextBlock Text="{Binding HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding WorkData.HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                 <TextBlock Text="AvgPremVol: " FontSize="11"/>
-                <TextBlock Text="{Binding AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding WorkData.AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" HorizontalAlignment="Center">
-                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource businessImg}" Command="local:WindowCommands.Business_Show">
+                <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource businessImg}" 
+                        Command="{Binding BusinessShowCommand}">
                     <Button.ToolTip>
                         <ToolTip>Stock businness</ToolTip>
                     </Button.ToolTip>
                 </Button>
                 <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource linkImg}"
-                        Command="local:WindowCommands.Link">
+                        Command="{Binding LinkStart}">
                     <Button.ToolTip>
                         <ToolTip>Link</ToolTip>
                     </Button.ToolTip>
@@ -167,7 +162,7 @@
                 <TextBox x:Name="FirstStockTextBox" Width="80" Margin="5,5,1,5"  CharacterCasing="Upper"
                          Text="{Binding FirstStockTextBoxString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
-                <Button MinWidth="20" Margin="0,5,1,5" Command="local:WindowCommands.Report_AddFromApp" 
+                <Button MinWidth="20" Margin="0,5,1,5" Command="{Binding ReportAddFromAppCommand}" 
                         Content="{StaticResource pointerImg}">
                     <Button.ToolTip>
                         <ToolTip>Add to today reports</ToolTip>

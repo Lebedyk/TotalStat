@@ -102,7 +102,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppConfiguration.cs" />
+    <Compile Include="AppSizeGeometry.cs" />
+    <Compile Include="AppWindowViewModel.cs" />
+    <Compile Include="DayShiftValidator.cs" />
+    <Compile Include="DBManager.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="Localize.cs" />
     <Compile Include="AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
@@ -112,11 +117,13 @@
     <Compile Include="DescriptionContext.cs" />
     <Compile Include="Dividend.cs" />
     <Compile Include="DividendContext.cs" />
-    <Compile Include="FileDialogSelect.cs" />
     <Compile Include="Link.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="RedactorWindow.xaml.cs">
       <DependentUpon>RedactorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RedactorWIndowViewModel.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="ReportContext.cs" />
     <Compile Include="Screen.cs" />
