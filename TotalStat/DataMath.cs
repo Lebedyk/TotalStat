@@ -24,16 +24,16 @@ namespace TotalStat
     }
     public class DataMath
     {
-        public string FirstTicker { get; set; }
-        public string SecondTicker { get; set; }
-        public double Beta { get; set; }
-        public double HvBeta { get; set; }
-        public double Correlation { get; set; }
-        public int AvgPremVol { get; set; }
-        public List<List<Screen>> AllDatesScreens { get; set; }
-        public List<Screen> SelectFirstStockScreens { get; set; } = new List<Screen>();
-        public List<Screen> SelectSecondStockScreens { get; set; } = new List<Screen>();
-        public List<DataForDataGrid> DataGrid { get; set; } = new List<DataForDataGrid>();
+        private string FirstTicker { get; set; }
+        private string SecondTicker { get; set; }
+        public double Beta { get; private set; }
+        public double HvBeta { get; private set; }
+        public double Correlation { get; private set; }
+        public int AvgPremVol { get; private set; }
+        private List<List<Screen>> AllDatesScreens { get; set; }
+        private List<Screen> SelectFirstStockScreens { get; set; } = new List<Screen>();
+        private List<Screen> SelectSecondStockScreens { get; set; } = new List<Screen>();
+        public List<DataForDataGrid> DataGrid { get; private set; } = new List<DataForDataGrid>();
         public DataMath()
         {
 
@@ -79,13 +79,7 @@ namespace TotalStat
                     }
                 }
             }                        
-        } 
-        private void SetDataGrid()
-        {
-            DataGrid = SelectFirstStockScreens.Join(SelectSecondStockScreens, f => f.Date, s => s.Date,
-                                              (f, s) => new DataForDataGrid(f.Date, f.NitePercent, s.NitePercent, f.PremVolume)).ToList();                                                    
-            DataGrid.Reverse();
-        }
+        }         
         private void SetBetaHvBeta()
         {
             double dirtyBeta;
@@ -113,6 +107,10 @@ namespace TotalStat
                     else if ((SelectFirstStockScreens[i].NitePercent == 0) || (SelectSecondStockScreens[i].NitePercent == 0))
                     {
                         dirtyBetaList.Add(1);
+                    }
+                    else
+                    {
+                        dirtyBetaList.Add(0);
                     }
                 }
             }            
@@ -152,5 +150,11 @@ namespace TotalStat
         {
             AvgPremVol = SelectFirstStockScreens.Count() > 0 ? (int)SelectFirstStockScreens.Average(p => p.PremVolume) : 0;
         }
+        private void SetDataGrid()
+        {            
+            DataGrid = SelectFirstStockScreens.Join(SelectSecondStockScreens, f => f.Date, s => s.Date,
+                                              (f, s) => new DataForDataGrid(f.Date, f.NitePercent, s.NitePercent, f.PremVolume))
+                                                .OrderByDescending(p => p.Date).ToList();           
+        }        
     }
 }

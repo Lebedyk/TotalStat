@@ -134,7 +134,7 @@
     <Compile Include="Sector.cs" />
     <Compile Include="SectorContext.cs" />
     <Compile Include="WindowCommands.cs" />
-    <Compile Include="WorkWithData.cs" />
+    <Compile Include="DataMath.cs" />
     <Page Include="AppWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

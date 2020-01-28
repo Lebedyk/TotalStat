@@ -11,14 +11,14 @@ namespace TotalStat
         public SolidColorBrush DarkRedBrush {get;set;}
         public SolidColorBrush DarkGreenBrush { get; set; }
 
-        public SolidColorBrush DefaultBrush { get; set; }
+        public SolidColorBrush BlackBrush { get; set; }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((double)value > 0)
             {
                 return DarkGreenBrush;
             }
-            else return (double)value < 0 ? DarkRedBrush : DefaultBrush;
+            else return (double)value < 0 ? DarkRedBrush : BlackBrush;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
                                                                                              throw new NotImplementedException();

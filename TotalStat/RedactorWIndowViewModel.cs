@@ -66,7 +66,7 @@ namespace TotalStat
                 OnPropertyChanged("ReportFilePath");
             }
         }
-        private string _dividendFilePath;
+        private string _dividendFilePath;        
         public string DividendFilePath
         {
             get { return _dividendFilePath; }
@@ -539,8 +539,7 @@ namespace TotalStat
                         string path = FinvizFilePath;
                         string fileText;
                         StreamReader file = null;
-                        bool errorInput = false;
-                        bool selectFile = false;
+                        bool errorInput = false;                        
                         int lineError = 1;
                         List<Description> addFinvizToTable = new List<Description>();
 
@@ -548,22 +547,24 @@ namespace TotalStat
                         {
                             file = new StreamReader(path);
                             fileText = await file.ReadToEndAsync();
-                            file.Close();
-                            selectFile = true;
+                            file.Close();                            
                             string[] splitLines = fileText.Split(Localize.splitLines);
                             foreach (string line in splitLines)
                             {
-                                try
+                                if(!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                                 {
-                                    addFinvizToTable.Add(new Description(line, Localize.splitTabulation));
+                                    try
+                                    {
+                                        addFinvizToTable.Add(new Description(line, Localize.splitTabulation));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errorInput = true;
+                                        MessageBox.Show("Ошибка обновления!\n Строка ошибки: " + lineError +
+                                        "\nРекомендуем удалить и заново загрузить день!", ex.Message);
+                                    }
+                                    lineError++;
                                 }
-                                catch (Exception ex)
-                                {
-                                    errorInput = true;
-                                    MessageBox.Show("Ошибка обновления!\n Строка ошибки: " + lineError +
-                                    "\nРекомендуем удалить и заново загрузить день!", ex.Message);
-                                }
-                                lineError++;
                             }
                             if (!errorInput)
                             {
@@ -577,15 +578,15 @@ namespace TotalStat
                                     MessageBox.Show("Ошибка загрузки в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                                 }
                             }
-                        }
+                            if (!errorInput)
+                            {
+                                MessageBox.Show("Обновление завершено успешно!");
+                            }
+                        }                        
                         catch (Exception ex)
                         {
                             MessageBox.Show("Выберите файл!", ex.Message);
-                        }
-                        if (selectFile && !errorInput)
-                        {
-                            MessageBox.Show("Обновление завершено успешно!");
-                        }
+                        }                        
                         InfoButtonsIsEnable = true;
                     }));
             }
@@ -618,8 +619,7 @@ namespace TotalStat
                         string path = AboutFilePath;
                         string fileText;
                         StreamReader file = null;
-                        bool errorInput = false;
-                        bool selectFile = false;
+                        bool errorInput = false;                        
                         int lineError = 1;
                         List<Business> addAboutToTable = new List<Business>();
 
@@ -627,22 +627,24 @@ namespace TotalStat
                         {
                             file = new StreamReader(path);
                             fileText = await file.ReadToEndAsync();
-                            file.Close();
-                            selectFile = true;
+                            file.Close();                            
                             string[] splitLines = fileText.Split(Localize.splitLines);
                             foreach (string line in splitLines)
                             {
-                                try
+                                if(!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                                 {
-                                    addAboutToTable.Add(new Business(line, Localize.splitTabulation));
-                                }
-                                catch (Exception ex)
-                                {
-                                    errorInput = true;
-                                    MessageBox.Show("Ошибка обновления!\n Строка ошибки: " + lineError +
-                                    "\nРекомендуем удалить и заново загрузить данные!", ex.Message);
-                                }
-                                lineError++;
+                                    try
+                                    {
+                                        addAboutToTable.Add(new Business(line, Localize.splitTabulation));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errorInput = true;
+                                        MessageBox.Show("Ошибка обновления!\n Строка ошибки: " + lineError +
+                                        "\nРекомендуем удалить и заново загрузить данные!", ex.Message);
+                                    }
+                                    lineError++;
+                                }                                
                             }
                             if (!errorInput)
                             {
@@ -656,15 +658,15 @@ namespace TotalStat
                                     MessageBox.Show("Ошибка загрузки рода деятельности в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                                 }
                             }
+                            if (!errorInput)
+                            {
+                                MessageBox.Show("Обновление завершено успешно!");
+                            }
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show("Выберите файл!", ex.Message);
-                        }
-                        if (selectFile && !errorInput)
-                        {
-                            MessageBox.Show("Обновление завершено успешно!");
-                        }
+                        }                        
                         InfoButtonsIsEnable = true;
                     }));
             }
@@ -680,6 +682,10 @@ namespace TotalStat
             string text = SectorAddSectorTextBox;
             try
             {
+                if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
+                {
+                    errorInput = true;
+                }
                 sectorList = _Parser.SectorParce(text, sectorLevel);
             }
             catch (Exception ex)
@@ -753,8 +759,8 @@ namespace TotalStat
                 return _reportFileDialogCommand ??
                     (_reportFileDialogCommand = new WindowCommand(obj =>
                     {
-                        FileDialogSelect fileDialogSelect = _fileManager.FileDialogSingle(Localize.txtFilter);
-                        ReportFilePath = fileDialogSelect.Path;
+                        FileDialogSelect fileDialogSelect = _fileManager.FileDialogSingle(Localize.txtFilter);                        
+                        ReportFilePath = fileDialogSelect != null ? fileDialogSelect.Path : string.Empty;
                     }));
             }
         }
@@ -798,13 +804,17 @@ namespace TotalStat
                                 string fileText = await openFile.ReadToEndAsync();
                                 openFile.Close();
                                 string[] splitLines = fileText.Split(Localize.splitLines);
-                                foreach (string ticker in splitLines)
+                                foreach (string line in splitLines)
                                 {
-                                    if (ticker.ToUpper() == Localize.ReportTimeSplit)
+                                    string ticker = line.Replace("\r", "");
+                                    if (!string.IsNullOrEmpty(ticker) && !string.IsNullOrWhiteSpace(ticker))
                                     {
-                                        earningTime = Localize.ReportTimeAC;
-                                    }
-                                    addReportToTable.Add(new Report(ticker, date, earningTime));
+                                        if (ticker.ToUpper() == Localize.ReportTimeSplit)
+                                        {
+                                            earningTime = Localize.ReportTimeAC;
+                                        }
+                                        addReportToTable.Add(new Report(ticker, date, earningTime));
+                                    }                                    
                                 }
                             }
                             catch (Exception ex)
@@ -851,10 +861,11 @@ namespace TotalStat
             {
                 try
                 {
-                    foreach (string ticker in splitLines)
+                    foreach (string line in splitLines)
                     {
-                        if (ticker != string.Empty)
+                        if (!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                         {
+                            string ticker = line.Replace("\r", "");
                             if (ticker.ToUpper() == Localize.ReportTimeSplit)
                             {
                                 earningTime = Localize.ReportTimeAC;
@@ -952,6 +963,7 @@ namespace TotalStat
                             {
                                 date = new DateTime(Int32.Parse(ReportDeleteDateYear), Int32.Parse(ReportDeleteDateMonth),
                                         Int32.Parse(ReportDeleteDateDay));
+                                _DBManager.ReportContextRemove(date);
                             }
                             catch (Exception ex)
                             {
@@ -959,15 +971,7 @@ namespace TotalStat
                                 MessageBox.Show("Введите корректную дату!", ex.Message);
                             }
 
-                        }
-                        if (!dataError)
-                        {
-                            _DBManager.ReportContextRemove(date);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Введите корректную дату!");
-                        }
+                        }                        
                         ReportButtonsIsEnable = true;
                     }));
             }
@@ -982,7 +986,7 @@ namespace TotalStat
                     (_dividendFileDialogCommand = new WindowCommand(obj =>
                     {
                         FileDialogSelect fileDialogSelect = _fileManager.FileDialogSingle(Localize.txtFilter);
-                        DividendFilePath = fileDialogSelect.Path;
+                        DividendFilePath = fileDialogSelect != null ? fileDialogSelect.Path : string.Empty;
                     }));
             }
         }
@@ -1029,9 +1033,12 @@ namespace TotalStat
                             {
                                 foreach (string line in splitLines)
                                 {
-                                    addDividendsToTable.Add(new Dividend(line, Localize.splitSpace, date));
-                                }
-                                lineError++;
+                                    if(!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
+                                    {
+                                        addDividendsToTable.Add(new Dividend(line, Localize.splitSpace, date));
+                                        lineError++;
+                                    }
+                                }                                
                             }
                             catch (Exception ex)
                             {
@@ -1079,9 +1086,12 @@ namespace TotalStat
                 {
                     foreach (string line in splitLines)
                     {
-                        DividendList.Add(new Dividend(line, Localize.splitSpace, date));                        
-                    }
-                    lineError++;
+                        if(!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
+                        {
+                            DividendList.Add(new Dividend(line, Localize.splitSpace, date));
+                        }
+                        lineError++;
+                    }                   
                 }
                 catch (Exception ex)
                 {

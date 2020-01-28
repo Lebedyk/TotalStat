@@ -17,7 +17,7 @@
         <Image x:Key="businessImg" Source="Image/business.png"/>
         
         <local:SetDataGridColorConverter x:Key="DeltaConvDataGrid" 
-                                         DefaultBrush="{x:Null}" DarkRedBrush="DarkRed" DarkGreenBrush="DarkGreen"/>
+                                         BlackBrush="Black" DarkRedBrush="DarkRed" DarkGreenBrush="DarkGreen"/>
         <local:ReportShowConverter x:Key="ReportShowConv" 
                                          DefaultBrush="{x:Null}" DarkRedBrush="DarkRed" DarkGreenBrush="DarkGreen" DarkBlueBrush="DarkBlue"/>
         <local:DividendShowConverter x:Key="DividendShowConv" DefaultBrush="{x:Null}" BlackBrush="Black"/>
@@ -123,19 +123,19 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                 <TextBlock Text="Beta: " FontSize="11"/>
-                <TextBlock Text="{Binding WorkData.Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Beta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
                 <TextBlock Text="Correlation: " FontSize="11"/>
-                <TextBlock Text="{Binding WorkData.Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Correlation, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
                 <TextBlock Text="HvBeta: " FontSize="11"/>
-                <TextBlock Text="{Binding WorkData.HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding HvBeta, StringFormat=0.00, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                 <TextBlock Text="AvgPremVol: " FontSize="11"/>
-                <TextBlock Text="{Binding WorkData.AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="{Binding AvgPremVol, FallbackValue=0}" FontSize="11" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" HorizontalAlignment="Center">
                 <Button MinHeight="15" MinWidth="35" Margin="7" Content="{StaticResource businessImg}" 
@@ -200,7 +200,7 @@
                 <ColumnDefinition/>                
                 <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" ItemsSource="{Binding Path = WorkData.DataGrid}"
+            <DataGrid Grid.Column="0" ItemsSource="{Binding Path = DataGridView}" IsReadOnly="True"
                       AutoGenerateColumns="False" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" 
                       ScrollViewer.HorizontalScrollBarVisibility="Auto" RowHeight="20" 
                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
@@ -213,19 +213,19 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding FirstNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                    <DataGridTextColumn Binding="{Binding FirstNitePercent, StringFormat='0.00'}" FontSize="11" FontWeight="Bold" Width="0.35*"
                                         ElementStyle="{StaticResource NiteFirstStyle}">
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{Binding ElementName = FirstStockTextBox, Path=Text}"/>
                         </DataGridTextColumn.Header>
-                    </DataGridTextColumn>                    
-                    <DataGridTextColumn Binding="{Binding SecondNitePercent}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding SecondNitePercent, StringFormat='0.00'}" FontSize="11" FontWeight="Bold" Width="0.35*"
                                         ElementStyle="{StaticResource NiteSecondStyle}">                        
                         <DataGridTextColumn.Header>
                             <TextBlock Text="{Binding ElementName=SecondStockTextBox, Path=Text}"/>
                         </DataGridTextColumn.Header>                       
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite}" FontSize="11" FontWeight="Bold" Width="0.35*"
+                    <DataGridTextColumn Header="Delta" Binding="{Binding DeltaNite, StringFormat='0.00'}" FontSize="11" FontWeight="Bold" Width="0.35*"
                                         ElementStyle="{StaticResource DeltaStyle}"/>
                     <DataGridTextColumn Header="PremVol" Binding="{Binding FirstPremVol}" FontSize="11" FontWeight="Bold" Width="0.5*">
                         <DataGridTextColumn.ElementStyle>

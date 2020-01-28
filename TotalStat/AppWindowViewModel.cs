@@ -12,9 +12,7 @@ using System.Windows.Threading;
 namespace TotalStat
 {
     class AppWindowViewModel : INotifyPropertyChanged
-    {
-        private List<List<Screen>> _dataBase;
-        private DataMath _workData;
+    {        
         private string _reportForView;
         private string _divForView;
         private string _firstStockTextBoxString;
@@ -27,11 +25,58 @@ namespace TotalStat
         private string _linkWindowText;
         IntPtr Hwnd;
 
-        public List<Sector> SectorBase { get; set; }
-        public List<Report> ReportBase { get; set; }
-        public List<Dividend> DividendBase { get; set; }
-        public List<Description> DescriptionBase { get; set; }
-        public List<Business> BusinessBase { get; set; }
+        private List<List<Screen>> _dataBase = new List<List<Screen>>();
+        private List<List<Screen>> DataBase
+        {
+            get { return _dataBase; }
+            set
+            {
+                _dataBase = value;
+                SetDataGridAndMath();
+            }
+        }
+        private List<Sector> _sectorBase = new List<Sector>();
+        public List<Sector> SectorBase 
+        {
+            get { return _sectorBase; }
+            set 
+            {
+                _sectorBase = value;
+                SetSectorsByLevels();
+            }
+        }
+        private List<Report> _reportBase = new List<Report>();
+        public List<Report> ReportBase 
+        { 
+            get { return _reportBase; }
+            set
+            {
+                _reportBase = value;
+                SetReport();
+                SetActualReports();
+            }
+        }
+        private List<Dividend> _dividendBase = new List<Dividend>();
+        public List<Dividend> DividendBase 
+        {
+            get { return _dividendBase; }
+            set 
+            {
+                _dividendBase = value;
+                SetDiv();
+            } 
+        }
+        private List<Description> _descriptionBase = new List<Description>();
+        public List<Description> DescriptionBase
+        {
+            get { return _descriptionBase; }
+            set
+            {
+                _descriptionBase = value;
+                SetDesc();
+            }
+        }
+        public List<Business> BusinessBase { get; set; } = new List<Business>();
         public string ReportForView
         {
             get { return _reportForView; }
@@ -60,7 +105,7 @@ namespace TotalStat
                 SetReport();
                 SetDiv();
                 SetDesc();
-                WorkData = new DataMath(FirstStockTextBoxString, SecondStockTextBoxString, _dataBase);
+                SetDataGridAndMath();
                 OnPropertyChanged("FirstStockTextBoxString");
             }
         }
@@ -70,7 +115,7 @@ namespace TotalStat
             set
             {
                 _secondStockTextBoxString = value;
-                WorkData = new DataMath(FirstStockTextBoxString, SecondStockTextBoxString, _dataBase);
+                SetDataGridAndMath();
             }
         }
         public Description Desc
@@ -82,18 +127,22 @@ namespace TotalStat
                 OnPropertyChanged("Desc");
             }
         }
-        public DataMath WorkData
-        {
-            get { return _workData; }
-            set
-            {
-                _workData = value;
-                OnPropertyChanged("WorkData");
-            }
-        }
+        private DataMath WorkData { get; set; }
         public ObservableCollection<Sector> FirstSectorForView { get; set; } = new ObservableCollection<Sector>();
         public ObservableCollection<Sector> SecondSectorForView { get; set; } = new ObservableCollection<Sector>();
         public ObservableCollection<Sector> ThirdSectorForView { get; set; } = new ObservableCollection<Sector>();
+        private List<DataForDataGrid> _dataGridView = new List<DataForDataGrid>();
+        public List<DataForDataGrid> DataGridView 
+        { 
+            get
+            { return _dataGridView; }
+            set
+            {
+                _dataGridView = value;
+                OnPropertyChanged("DataGridView");
+            }
+        }
+
         private string _firstSectorName;
         public string FirstSectorName 
         { 
@@ -125,24 +174,58 @@ namespace TotalStat
             }
         }
         public static List<Report> ActualReports { get; set; } = new List<Report>();
+        private double _beta;
+        public double Beta
+        {
+            get { return _beta; }
+            set
+            {
+                _beta = value;
+                OnPropertyChanged("Beta");
+            }
+        }
+        private double _hvBeta;
+        public double HvBeta 
+        {
+            get { return _hvBeta; }
+            set
+            {
+                _hvBeta = value;
+                OnPropertyChanged("HvBeta");
+            }
+        }
+        private double _correlation;
+        public double Correlation 
+        {
+            get { return _correlation; }
+            set
+            {
+                _correlation = value;
+                OnPropertyChanged("Correlation");
+            }
+        }
+        private int _avgPremVol;
+        public int AvgPremVol 
+        { 
+            get { return _avgPremVol; }
+            set
+            {
+                _avgPremVol = value;
+                OnPropertyChanged("AvgPremVol");
+            }
+        }
 
         private DBManager _DBManager = new DBManager();
         public AppWindowViewModel()
         {
-            _dataBase = LoadScreens();
-            SectorBase = LoadSectors();
-            ReportBase = LoadReports();
-            DividendBase = LoadDividends();
-            DescriptionBase = LoadDescriptions();
-            BusinessBase = LoadBusinesses();
+            LoadScreens();
+            LoadSectors();
+            LoadReports();
+            LoadDividends();
+            LoadDescriptions();
+            LoadBusinesses();
             FirstStockTextBoxString = "BAC";
-            SecondStockTextBoxString = "SPY";
-            SetSectorsByLevels();
-            SetReport();
-            SetDiv();
-            SetDesc();
-            ActualReports = GetActualReports();
-            WorkData = new DataMath(FirstStockTextBoxString, SecondStockTextBoxString, _dataBase);
+            SecondStockTextBoxString = "SPY";            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -151,24 +234,35 @@ namespace TotalStat
             PropertyChangedEventHandler handler = PropertyChanged;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
-        //ASYNCCCCCC
-        private List<List<Screen>> LoadScreens()
+            
+        //переделать методы Set нормально
+        private async void LoadScreens()
         {
-            ScreenContext screenDb = new ScreenContext();
-            List<List<Screen>> screensdata = new List<List<Screen>>();
-            var first = screenDb.Screens.AsNoTracking().GroupBy(p => p.Date).Take(400).ToList();
-            foreach (var second in first)
+            ScreenContext screenDb = new ScreenContext();            
+            await Task.Run(() =>
             {
-                screensdata.Add(second.ToList());
-            }
-            return screensdata;
+                for(int i = 350; i >= 0; i -= 50)
+                {                    
+                    List<List<Screen>> screensdata = new List<List<Screen>>();
+                    var first = screenDb.Screens.AsNoTracking().GroupBy(p => p.Date).OrderBy(t=>t.Key).Skip(i).Take(50).ToList();
+                    foreach (var second in first)
+                    {
+                        screensdata.Add(second.ToList());
+                    }
+                    DataBase.AddRange(screensdata);                    
+                }
+            });
         }
-        private List<Sector> LoadSectors()
+        private async void LoadSectors()
         {
-            SectorContext sectorDb = new SectorContext();
-            return sectorDb.Sectors.AsNoTracking().ToList();
-        }
+            List<Sector> sectors = new List<Sector>();
+            await Task.Run(() =>
+            {
+                SectorContext sectorDb = new SectorContext();
+                sectors = sectorDb.Sectors.AsNoTracking().ToList();
+            });
+            SectorBase = sectors;
+        }        
         private void SetSectorsByLevels()
         {
             FirstSectorForView.Clear();
@@ -218,57 +312,59 @@ namespace TotalStat
                     ThirdSectorName = ThirdSectorForView[0].SectorName;
                 }
             }
-        }
-        private List<Report> LoadReports()
+        }        
+        private async void LoadReports()
         {
             List<Report> reportslist = new List<Report>();
-            ReportContext reportDb = new ReportContext();
-            DateTime today = DateTime.Today;
-            DateTime yesterday = today.AddDays(-1);
-            DateTime beforeyesterday = today.AddDays(-2);
-            DateTime tomorrow = today.AddDays(1);
+            await Task.Run(() =>
+            {                
+                ReportContext reportDb = new ReportContext();
+                DateTime today = DateTime.Today;
+                DateTime yesterday = today.AddDays(-1);
+                DateTime beforeyesterday = today.AddDays(-2);
+                DateTime tomorrow = today.AddDays(1);
 
-            if (today.DayOfWeek == DayOfWeek.Friday)
-            {
-                beforeyesterday = today.AddDays(-2);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(3);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Monday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-3);
-                tomorrow = today.AddDays(1);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Tuesday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(1);
-            }
+                if (today.DayOfWeek == DayOfWeek.Friday)
+                {
+                    beforeyesterday = today.AddDays(-2);
+                    yesterday = today.AddDays(-1);
+                    tomorrow = today.AddDays(3);
+                }
+                else if (today.DayOfWeek == DayOfWeek.Monday)
+                {
+                    beforeyesterday = today.AddDays(-4);
+                    yesterday = today.AddDays(-3);
+                    tomorrow = today.AddDays(1);
+                }
+                else if (today.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    beforeyesterday = today.AddDays(-4);
+                    yesterday = today.AddDays(-1);
+                    tomorrow = today.AddDays(1);
+                }
 
-            var reportstoday = reportDb.Reports.Where(p => p.Date == today).ToList();
-            var reportsyesterday = reportDb.Reports.Where(p => p.Date == yesterday).ToList();
-            var reportsbeforeyesterday = reportDb.Reports.Where(p => p.Date == beforeyesterday).Where(p => p.EarningTime == "After Close").ToList();
-            var reportstomorrow = reportDb.Reports.Where(p => p.Date == tomorrow).ToList();
-            if (reportstoday != null)
-            {
-                reportslist.AddRange(reportstoday);
-            }
-            if (reportsyesterday != null)
-            {
-                reportslist.AddRange(reportsyesterday);
-            }
-            if (reportsbeforeyesterday != null)
-            {
-                reportslist.AddRange(reportsbeforeyesterday);
-            }
-            if (reportstomorrow != null)
-            {
-                reportslist.AddRange(reportstomorrow);
-            }
-
-            return reportslist;
+                var reportstoday = reportDb.Reports.Where(p => p.Date == today).ToList();
+                var reportsyesterday = reportDb.Reports.Where(p => p.Date == yesterday).ToList();
+                var reportsbeforeyesterday = reportDb.Reports.Where(p => p.Date == beforeyesterday).Where(p => p.EarningTime == "After Close").ToList();
+                var reportstomorrow = reportDb.Reports.Where(p => p.Date == tomorrow).ToList();
+                if (reportstoday != null)
+                {
+                    reportslist.AddRange(reportstoday);
+                }
+                if (reportsyesterday != null)
+                {
+                    reportslist.AddRange(reportsyesterday);
+                }
+                if (reportsbeforeyesterday != null)
+                {
+                    reportslist.AddRange(reportsbeforeyesterday);
+                }
+                if (reportstomorrow != null)
+                {
+                    reportslist.AddRange(reportstomorrow);
+                }                
+            });
+            ReportBase = reportslist;
         }
         private void SetReport()
         {
@@ -329,7 +425,7 @@ namespace TotalStat
             }
             ReportForView = firstcharacter + secondcharacter;
         }
-        private List<Report> GetActualReports()
+        private void SetActualReports()
         {
             List<Report> ActualReportList = new List<Report>();
             DateTime today = DateTime.Today;
@@ -365,15 +461,17 @@ namespace TotalStat
             {
                 ActualReportList.AddRange(RepYesterdayAfterClose);
             }
-            return ActualReportList;
+            ActualReports = ActualReportList;
         }
-        private List<Dividend> LoadDividends()
+        private async void LoadDividends()
         {
             List<Dividend> dividends = new List<Dividend>();
-            DividendContext divDb = new DividendContext();
-            dividends = divDb.Dividends.AsNoTracking().Where(p => p.Date == DateTime.Today).ToList();
-
-            return dividends;
+            await Task.Run(() =>
+            {                
+                DividendContext divDb = new DividendContext();
+                dividends = divDb.Dividends.AsNoTracking().Where(p => p.Date == DateTime.Today).ToList();                
+            });
+            DividendBase = dividends;
         }
         private void SetDiv()
         {
@@ -384,24 +482,36 @@ namespace TotalStat
                 DivForView = temp.Sum.ToString();
             }
         }
-        private List<Description> LoadDescriptions()
+        private async void LoadDescriptions()
         {
             List<Description> descriptions = new List<Description>();
-            DescriptionContext descDb = new DescriptionContext();
-            descriptions = descDb.Descriptions.AsNoTracking().ToList();
-
-            return descriptions;
+            await Task.Run(() =>
+            {                
+                DescriptionContext descDb = new DescriptionContext();
+                descriptions = descDb.Descriptions.AsNoTracking().ToList();
+            });
+            DescriptionBase = descriptions;
         }
         private void SetDesc()
         {
             Desc = DescriptionBase.FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
         }
-        private List<Business> LoadBusinesses()
+        private async void LoadBusinesses()
         {
-            List<Business> businesses = new List<Business>();
-            BusinessContext busDb = new BusinessContext();
-            businesses = busDb.Businesses.AsNoTracking().ToList();
-            return businesses;
+            await Task.Run(() =>
+            {                
+                BusinessContext busDb = new BusinessContext();
+                BusinessBase = busDb.Businesses.AsNoTracking().ToList();
+            });            
+        }
+        private void SetDataGridAndMath()
+        {
+            WorkData = new DataMath(FirstStockTextBoxString, SecondStockTextBoxString, _dataBase);
+            Beta = WorkData.Beta;
+            HvBeta = WorkData.HvBeta;
+            Correlation = WorkData.Correlation;
+            AvgPremVol = WorkData.AvgPremVol;            
+            DataGridView = WorkData.DataGrid;            
         }
 
         private WindowCommand _reportAddFromAppCommand;

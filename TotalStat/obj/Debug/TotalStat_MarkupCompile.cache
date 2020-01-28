@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\MVSProjects\TotalStat\TotalStat\obj\Debug\
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\
 TotalStat
 none
 false
 DEBUG;TRACE
-D:\MVSProjects\TotalStat\TotalStat\App.xaml
+D:\Projects\MVS\TotalStat\TotalStat\App.xaml
 31730318535
 
-321615345357
-162129656013
+32-339787560
+16-726054482
 AppWindow.xaml;MainWindow.xaml;RedactorWindow.xaml;
 
 False

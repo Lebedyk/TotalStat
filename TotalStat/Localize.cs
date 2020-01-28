@@ -2,7 +2,7 @@
 {
     public static class Localize
     {
-        public const string About = "Bussiness";
+        public const string About = "Businesses";
         public const string Finviz = "Descriptions";        
         public const string Trunc = "TRUNCATE TABLE";
 
@@ -18,7 +18,7 @@
         public const string TomorrowAC = "TAC";
 
         public const string ReportTimeBO = "Before Open";
-        public const string ReportTimeAC = "AfterClose";
+        public const string ReportTimeAC = "After Close";
         public const string ReportTimeSplit = "AFTER";
 
         public const string DayToday = "TODAY";

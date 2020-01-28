@@ -44,10 +44,13 @@ namespace TotalStat
             List<Sector> sector = new List<Sector>();
             string[] splitLine = fullsector.Split(Localize.splitLines);
             try
-            {
+            {                
                 foreach (string line in splitLine)
                 {
-                    sector.Add(new Sector(line, Localize.splitSpace, sectorLevel));
+                    if (!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
+                    {
+                        sector.Add(new Sector(line, Localize.splitSpace, sectorLevel));
+                    }                        
                 }
             }
             catch (Exception ex)

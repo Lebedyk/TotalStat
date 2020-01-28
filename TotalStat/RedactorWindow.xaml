@@ -384,9 +384,10 @@
                         <TextBlock.Text>Выберите файл:</TextBlock.Text>
                     </TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBox x:Name="DividendFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Right" Margin="15, 0,0,0"/>
+                        <TextBox x:Name="DividendFilePath" Width="220" HorizontalAlignment="Right" TextAlignment="Justify" Margin="15, 0,0,0"
+                                 Text="{Binding DividendFilePath, Mode=TwoWay}"/>
                         <Button x:Name="DividendAddFile" Content="..." MinWidth="20" HorizontalAlignment="Left"
-                        Command="" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
+                        Command="{Binding DividendFileDialogCommand}" IsEnabled="{Binding DividendButtonIsEnable, Mode=TwoWay}">
                             <Button.ToolTip>Добавить файлы</Button.ToolTip>
                         </Button>
                         <Button x:Name="DividendRefreshButton" MinWidth="60" Height="20" Margin="20,0,0,0"
