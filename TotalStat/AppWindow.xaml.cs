@@ -21,11 +21,17 @@ namespace TotalStat
             InitializeComponent();
             DataContext = new AppWindowViewModel();
             this.Closed += AppWindow_Closed;
-        }        
+        }
+        ~AppWindow()
+        {
+            this.Closed -= AppWindow_Closed;
+        }
+       
         private void AppWindow_Closed(object sender, EventArgs e)
         {            
             App.Current.MainWindow.Visibility = Visibility.Visible;
             AppSizeGeometry.SaveSizeAndGeometry();            
         }        
+
     }    
 }

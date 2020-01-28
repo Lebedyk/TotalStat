@@ -22,11 +22,16 @@ namespace TotalStat
             this.Closed += RedactorWindowClosed;            
             DataContext = new RedactorWindowViewModel();
         }
+        ~RedactorWindow()
+        {
+            this.Closed -= RedactorWindowClosed;
+        }
         private void RedactorWindowClosed(object sender, EventArgs e)
         {            
             App.Current.MainWindow.Visibility = Visibility.Visible;
             AppSizeGeometry.SaveSizeAndGeometry();
         }
+
         
     }
 }

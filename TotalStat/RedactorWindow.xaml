@@ -68,7 +68,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="DataAddFileButton" Grid.Row="0" Command="{Binding DataFileDialogCommand}"
-                                    IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                    IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal" >
                                     <Image Source="Image\add.png"/>
                                     <TextBlock FontWeight="Bold">Добавить</TextBlock>
@@ -76,7 +76,7 @@
                                 <Button.ToolTip>Добавить файлы</Button.ToolTip>
                             </Button>
                             <Button x:Name="DataRemoveFileButton" Grid.Row="1" Command="{Binding DataRemoveCommand}"
-                                    IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                    IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Image\delete.png" MaxHeight="17"/>
                                     <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -107,17 +107,29 @@
 
                         <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" Height="65" Width="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
                                  FontWeight="Bold" FontSize="12" Margin="4,10,5,10" Command="{Binding DataRefreshCommand}"
-                                IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock FontWeight="Bold">Обновить</TextBlock>
                                 <Image Source="Image\refresh.png" MaxHeight="35"/>
                             </StackPanel>
                             <Button.ToolTip>Обновить из списка</Button.ToolTip>
                         </Button>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Height="32" VerticalAlignment="Center" HorizontalAlignment="Right" 
-                       Text="Последнее обновление:" TextWrapping="Wrap" FontStyle="Oblique" Margin="2,5,0,5"/>
-                        <TextBlock x:Name="DataLastRefreshTextBlock" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left"
-                       Height="16" Margin="5" FontWeight="Bold" Text="{Binding LastUpdate}" />
+                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                    Orientation="Vertical" Margin="5" Height="60">
+                            <TextBlock  Height="18" VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Text="Последнее обновление:" FontStyle="Oblique" Margin="2,5,0,2"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="2,0,3,1" Height="25">
+                                <TextBlock x:Name="DataLastRefreshTextBlock" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" 
+                                           Grid.RowSpan="2" VerticalAlignment="Center" TextAlignment="Right"
+                                            Height="18" MinWidth="90" Margin="2,2,4,2" FontWeight="Bold" Text="{Binding LastUpdate}" />
+                                <Button Grid.Row="1" Grid.Column="3" Grid.RowSpan="2" Height="20" Width="20" 
+                                        Command="{Binding DataLastDateRefresh}" IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
+                                    <StackPanel>
+                                        <Image Source="Image\refresh.png" MaxHeight="35"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>                            
+                        </StackPanel>                        
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="6,20,10,15" Height="43" HorizontalAlignment="Center">
                             <TextBlock FontSize="12" FontWeight="Bold"  TextAlignment="Center">Удалить день:</TextBlock>
@@ -132,7 +144,7 @@
                                 <TextBox x:Name="DataDeleteDateYear" MaxHeight="20" Width="40" Margin="2"
                                          Text="{Binding DataDeleteDateYear, Mode=OneWayToSource}"/>
                                 <Button x:Name="DataDeleteDateButton" MaxHeight="20" Margin="3,0,0,0" 
-                                        Command="{Binding DataDeleteDateCommand}" IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                        Command="{Binding DataDeleteDateCommand}" IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="Image\delete.png"/>
                                         <TextBlock FontWeight="Bold">Удалить</TextBlock>
@@ -165,7 +177,7 @@
                                 </TextBox.ToolTip>
                             </TextBox>
                             <Button x:Name="DataAddDataButton" Height="55" Width="70" Margin="8,20,20,20" 
-                                Command="{Binding DataAddDataCommand}" IsEnabled="{Binding ButtonIsEnable, Mode=TwoWay}">
+                                Command="{Binding DataAddDataCommand}" IsEnabled="{Binding DataButtonsIsEnable, Mode=TwoWay}">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock FontWeight="Bold">Добавить</TextBlock>
                                     <Image Source="Image\add.png" Width="35"/>                                    

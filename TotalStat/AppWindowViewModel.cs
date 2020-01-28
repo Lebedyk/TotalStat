@@ -216,6 +216,7 @@ namespace TotalStat
         }
 
         private DBManager _DBManager = new DBManager();
+        private DayShiftValidator _DayShiftValidator = new DayShiftValidator();
         public AppWindowViewModel()
         {
             LoadScreens();
@@ -235,7 +236,6 @@ namespace TotalStat
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
             
-        //переделать методы Set нормально
         private async void LoadScreens()
         {
             ScreenContext screenDb = new ScreenContext();            
@@ -373,39 +373,12 @@ namespace TotalStat
             string secondcharacter = "";
             Report temp = ReportBase.FirstOrDefault(p => p.Ticker == FirstStockTextBoxString);
             DateTime today = DateTime.Today;
-            DateTime yesterday = today.AddDays(-1);
-            DateTime beforeyesterday = today.AddDays(-2);
-            DateTime tomorrow = today.AddDays(1);
+            DateTime yesterday = _DayShiftValidator.GetShift(Localize.DayYesterday);
+            DateTime beforeyesterday = _DayShiftValidator.GetShift(Localize.DayBeforeYesterday);
+            DateTime tomorrow = _DayShiftValidator.GetShift(Localize.DayTomorrow);
 
-            if (today.DayOfWeek == DayOfWeek.Friday)
-            {
-                beforeyesterday = today.AddDays(-2);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(3);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Monday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-3);
-                tomorrow = today.AddDays(1);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Tuesday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(1);
-            }
             if (temp != null)
             {
-                if (temp.EarningTime == "Before Open")
-                {
-                    secondcharacter = "BO";
-                }
-                else
-                {
-                    secondcharacter = "AC";
-                }
-
                 if (temp.Date == today)
                 {
                     firstcharacter = "A";
@@ -422,6 +395,8 @@ namespace TotalStat
                 {
                     firstcharacter = "T";
                 }
+
+                secondcharacter = temp.EarningTime == Localize.ReportTimeBO ? "BO" : "AC";
             }
             ReportForView = firstcharacter + secondcharacter;
         }
@@ -429,30 +404,10 @@ namespace TotalStat
         {
             List<Report> ActualReportList = new List<Report>();
             DateTime today = DateTime.Today;
-            DateTime yesterday = today.AddDays(-1);
-            DateTime beforeyesterday = today.AddDays(-2);
-            DateTime tomorrow = today.AddDays(1);
+            DateTime yesterday = _DayShiftValidator.GetShift(Localize.DayYesterday);           
 
-            if (today.DayOfWeek == DayOfWeek.Friday)
-            {
-                beforeyesterday = today.AddDays(-2);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(3);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Monday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-3);
-                tomorrow = today.AddDays(1);
-            }
-            else if (today.DayOfWeek == DayOfWeek.Tuesday)
-            {
-                beforeyesterday = today.AddDays(-4);
-                yesterday = today.AddDays(-1);
-                tomorrow = today.AddDays(1);
-            }
-            var RepTodayBeforeOpen = ReportBase.Where(p => p.Date == today).Where(p => p.EarningTime == "Before Open").ToList();
-            var RepYesterdayAfterClose = ReportBase.Where(p => p.Date == yesterday).Where(p => p.EarningTime == "After Close").ToList();
+            var RepTodayBeforeOpen = ReportBase.Where(p => p.Date == today).Where(p => p.EarningTime == Localize.ReportTimeBO).ToList();
+            var RepYesterdayAfterClose = ReportBase.Where(p => p.Date == yesterday).Where(p => p.EarningTime == Localize.ReportTimeAC).ToList();
             if (RepTodayBeforeOpen.Count() > 0)
             {
                 ActualReportList.AddRange(RepTodayBeforeOpen);
@@ -475,7 +430,7 @@ namespace TotalStat
         }
         private void SetDiv()
         {
-            DivForView = "";
+            DivForView = string.Empty;
             Dividend temp = DividendBase.Where(p => p.Ticker == FirstStockTextBoxString).FirstOrDefault();
             if (temp != null)
             {

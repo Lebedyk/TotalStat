@@ -24,6 +24,7 @@
         public const string DayToday = "TODAY";
         public const string DayTomorrow = "TOMORROW";
         public const string DayYesterday = "YESTERDAY";
+        public const string DayBeforeYesterday = "BEFORE YESTERDAY";
 
         public const char splitSpace = ' ';
         public const char splitTabulation = '\t';

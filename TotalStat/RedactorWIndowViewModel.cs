@@ -96,7 +96,7 @@ namespace TotalStat
             set
             {
                 _dataButtonsIsEnable = value;
-                OnPropertyChanged("ButtonIsEnable");
+                OnPropertyChanged("DataButtonsIsEnable");
             }
         }
         private bool _infoButtonsIsEnable = true;
@@ -278,9 +278,6 @@ namespace TotalStat
         public RedactorWindowViewModel()
         {
             GetDataLastRefreshDate();
-
-
-
         }
 
         private WindowCommand _dataFileDialogCommand;
@@ -331,7 +328,7 @@ namespace TotalStat
                             ScreenContext db = new ScreenContext();
                             string fileText = null;
                             StreamReader file = null;
-                            DateTime fileDate = new DateTime();
+                            DateTime date = new DateTime();
                             bool errorInput = false;
                             bool selectFile = false;
                             int lineError = 1;
@@ -339,17 +336,17 @@ namespace TotalStat
                             try
                             {
                                 file = new StreamReader(fileDialog.Path);
-                                fileDate = _Parser.ParceStringToDate(fileDialog.Name);
+                                date = _Parser.ParceStringToDate(fileDialog.Name);
                                 selectFile = true;
-                                var dates = db.Screens.FirstOrDefault(p => p.Date == fileDate);
+                                var dates = db.Screens.FirstOrDefault(p => p.Date == date);
                                 if (dates != null)
                                 {
                                     errorInput = true;
-                                    MessageBox.Show("Дата: " + fileDate + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
+                                    MessageBox.Show("Дата: " + date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
                                 }
                                 else
                                 {
-                                    StatusBar = "Идет добавление " + fileDate.Date.ToString();
+                                    StatusBar = "Идет добавление " + date.Date.ToString();
                                 }
                             }
                             catch (Exception ex)
@@ -365,11 +362,11 @@ namespace TotalStat
                                     file.Close();
                                     fileText = fileText.Replace(",", "").Replace("\r", "");
                                     string[] splitLines = fileText.Split('\n');
-                                    foreach (string temp in splitLines)
+                                    foreach (string line in splitLines)
                                     {
-                                        if (temp != string.Empty)
+                                        if (!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                                         {
-                                            addScreenToTable.Add(new Screen(temp, Localize.splitTabulation));
+                                            addScreenToTable.Add(new Screen(line, Localize.splitTabulation, date));
                                         }
                                         lineError++;
                                     }
@@ -389,12 +386,11 @@ namespace TotalStat
                                     catch (Exception ex)
                                     {
                                         errorInput = true;
-                                        MessageBox.Show("Ошибка загрузки даты за " + fileDate + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
+                                        MessageBox.Show("Ошибка загрузки даты за " + date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                                     }
                                 }
                             }
-                        }
-                        GetDataLastRefreshDate();
+                        }                        
                         StatusBar = "Обновление завершено!";
                         _dataButtonsIsEnable = true;
                     }));
@@ -436,8 +432,7 @@ namespace TotalStat
                             MessageBox.Show("Введите корректную дату!");
                         }
                         DataButtonsIsEnable = true;
-                        StatusBar = "Удаление завершено!";
-                        GetDataLastRefreshDate();
+                        StatusBar = "Удаление завершено!";                        
                     }));
             }
         }
@@ -453,31 +448,30 @@ namespace TotalStat
                         DataButtonsIsEnable = false;
                         ScreenContext db = new ScreenContext();
                         string textTextBox = DataAddDataTextBox;
-                        string[] stringArr = textTextBox.Split('\n');
-                        DateTime today = DateTime.Now.Date;
+                        string[] splitLines = textTextBox.Split('\n');
+                        DateTime date = DateTime.Now.Date;
                         int lineError = 1;
                         bool error_input = false;
                         List<Screen> ScreenList = new List<Screen>();
-                        var dates = db.Screens.FirstOrDefault(p => p.Date == today);
+                        var dates = db.Screens.FirstOrDefault(p => p.Date == date);
                         if (dates != null)
                         {
                             error_input = true;
-                            MessageBox.Show("Сегодняшняя дата: " + today + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
+                            MessageBox.Show("Сегодняшняя дата: " + date + " уже загружена! \n Рекомендуем удалить и загрузить день заново!");
                         }
                         else
                         {
-                            StatusBar = "Добавление: " + today.Date.ToString();
+                            StatusBar = "Добавление: " + date.Date.ToString();
                         }
                         if (!error_input)
                         {
-                            foreach (string newsplit in stringArr)
+                            foreach (string line in splitLines)
                             {
-                                if (newsplit != "")
+                                if (!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                                 {
                                     try
-                                    {
-                                        var s = new Screen(newsplit, Localize.splitSpace);
-                                        ScreenList.Add(s);
+                                    {                                        
+                                        ScreenList.Add(new Screen(line, Localize.splitSpace, date));
                                     }
                                     catch (Exception ex)
                                     {
@@ -498,15 +492,26 @@ namespace TotalStat
                             catch (Exception ex)
                             {
                                 error_input = true;
-                                MessageBox.Show("Ошибка загрузки даты за " + today + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
+                                MessageBox.Show("Ошибка загрузки даты за " + date + " в базу данных! \nРекомендуем удалить и заново загрузить день!", ex.Message);
                             }
                         }
                         if (!error_input)
                         {
-                            MessageBox.Show("Обновление DATA за " + today + " завершено успешно!");
+                            MessageBox.Show("Обновление DATA за " + date + " завершено успешно!");
                         }
                         StatusBar = "Добавление завершено!";
-                        DataButtonsIsEnable = true;
+                        DataButtonsIsEnable = true;                        
+                    }));
+            }
+        }
+        private WindowCommand _dataLastDateRefresh;
+        public WindowCommand DataLastDateRefresh
+        {
+            get
+            {
+                return _dataLastDateRefresh ??
+                    (_dataLastDateRefresh = new WindowCommand(async obj =>
+                    {
                         GetDataLastRefreshDate();
                     }));
             }
