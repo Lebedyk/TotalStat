@@ -102,7 +102,7 @@
                         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="2">
                             <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="15" Margin="1" FontWeight="Bold">
                             Обновление DATA из файлов</TextBlock>
-                            <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0" HorizontalAlignment="Center">(Формат файла в FAQ #####)</TextBlock>
+                            <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0" HorizontalAlignment="Center">(Раздел в FAQ 2.1)</TextBlock>
                         </StackPanel>
 
                         <Button x:Name="DataRefreshButton" Grid.Row="1"  Grid.Column="0" Grid.RowSpan="2" Height="65" Width="65" HorizontalAlignment="Left" VerticalAlignment="Center" 
@@ -220,7 +220,7 @@
                             <Button.ToolTip>Обновить из выбранного файла</Button.ToolTip>
                         </Button>
                     </StackPanel>
-                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.2.1</TextBlock>
                     <Separator Margin="5,15,5,15"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="Bold">Род деятельности</TextBlock>
                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" FontWeight="Bold" FontStyle="Normal"   
@@ -243,9 +243,10 @@
                             <Button.ToolTip>Обновить из выбранного файла</Button.ToolTip>                            
                         </Button>
                     </StackPanel>
-                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.2.2</TextBlock>
                     <Separator Margin="5,15,5,10"></Separator>
-                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Сектора</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,5" FontWeight="Bold">Сектора</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.2.3</TextBlock>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <TextBox x:Name="SectorAddSectorTextBox" Height="140" Width="230" Margin="20,5,5,10" AcceptsReturn="True"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -309,7 +310,7 @@
                     </StackPanel>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Разделителем BMO и AMC служит слово After</TextBlock>
-                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.3.1</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление репортов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
@@ -356,7 +357,7 @@
                     </StackPanel>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Разделителем BMO и AMC служит слово After</TextBlock>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
-                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.3.2</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -412,7 +413,7 @@
                         </Button>
                     </StackPanel>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла должен быть YYYY.MM.DD.txt(например 2018.12.26.txt)</TextBlock>
-                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Формат файла в FAQ #####</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.4.1</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Обновление дивидендов из вставки</TextBlock>
                     <StackPanel Orientation="Horizontal">
@@ -456,6 +457,7 @@
                         </StackPanel>                       
                     </StackPanel>
                     <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Для пятницы завтра = понедельник, для понедельника вчера = пятница</TextBlock>
+                    <TextBlock FontSize="10" FontStyle="Oblique" Margin="5,0,0,0">Раздел в FAQ 2.4.2</TextBlock>
                     <Separator Margin="5,10,5,10"></Separator>
                     <TextBlock HorizontalAlignment="Center" FontSize="15" Margin="0,0,0,10" FontWeight="Bold">Удаление даты</TextBlock>                    
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

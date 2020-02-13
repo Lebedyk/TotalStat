@@ -33,7 +33,7 @@ namespace TotalStat
             _map.Add(beforeYesterday, () =>
                 (DateTime.Today.DayOfWeek == DayOfWeek.Monday) || (DateTime.Today.DayOfWeek == DayOfWeek.Thursday)
                     ? DateTime.Today.AddDays(-4)
-                    : DateTime.Today.AddDays(-2)
+                    : DateTime.Today.AddDays(-2));
             }
 
         public DateTime GetShift(object day)

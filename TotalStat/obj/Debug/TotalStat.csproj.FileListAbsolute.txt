@@ -46,3 +46,4 @@ D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.csproj.GenerateResource.c
 D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.csproj.CopyComplete
 D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.exe
 D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.pdb
+D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\FAQ.docx

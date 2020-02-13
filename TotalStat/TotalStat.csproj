@@ -86,6 +86,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -107,6 +108,7 @@
     </ApplicationDefinition>
     <Compile Include="AppSizeGeometry.cs" />
     <Compile Include="AppWindowViewModel.cs" />
+    <Compile Include="ConnectionSet.cs" />
     <Compile Include="DayShiftValidator.cs" />
     <Compile Include="DBManager.cs" />
     <Compile Include="FileManager.cs" />
@@ -175,6 +177,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="FAQ.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

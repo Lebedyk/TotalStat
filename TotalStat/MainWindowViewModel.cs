@@ -80,9 +80,9 @@ namespace TotalStat
                 return _openFAQ ??
                     (_openFAQ = new WindowCommand(obj =>
                     {
-                        if (File.Exists(Directory.GetCurrentDirectory() + "\\FAQ.txt"))
+                        if (File.Exists(Directory.GetCurrentDirectory() + "\\FAQ.docx"))
                         {
-                            Process.Start(Directory.GetCurrentDirectory() + "\\FAQ.txt");
+                            Process.Start(Directory.GetCurrentDirectory() + "\\FAQ.docx");
                         }
                     }));
             }

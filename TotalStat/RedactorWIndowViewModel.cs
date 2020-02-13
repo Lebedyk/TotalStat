@@ -1040,7 +1040,7 @@ namespace TotalStat
                                 {
                                     if(!string.IsNullOrEmpty(line) && !string.IsNullOrWhiteSpace(line))
                                     {
-                                        addDividendsToTable.Add(new Dividend(line, Localize.splitSpace, date));
+                                        addDividendsToTable.Add(new Dividend(line, Localize.splitTabulation, date));
                                         lineError++;
                                     }
                                 }                                

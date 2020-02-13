@@ -22,3 +22,4 @@ D:\Projects\MVS\TotalStat\TotalStat\obj\Release\TotalStat.csproj.GenerateResourc
 D:\Projects\MVS\TotalStat\TotalStat\obj\Release\TotalStat.csproj.CopyComplete
 D:\Projects\MVS\TotalStat\TotalStat\obj\Release\TotalStat.exe
 D:\Projects\MVS\TotalStat\TotalStat\obj\Release\TotalStat.pdb
+D:\Projects\MVS\TotalStat\TotalStat\bin\Release\FAQ.docx

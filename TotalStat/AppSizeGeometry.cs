@@ -29,30 +29,30 @@ namespace TotalStat
                     StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\configuration.txt");
                     while ((line = reader.ReadLine()) != null)
                     {
-                        string[] split_arr = line.Split(' ');
-                        if(split_arr.Length > 1)
+                        string[] splitArr = line.Split(' ');
+                        if(splitArr.Length > 1)
                         {
-                            if (split_arr[0] == _appSize)
+                            if (splitArr[0] == _appSize)
                             {
-                                string[] temp = split_arr[1].Split(_delimeter);
+                                string[] temp = splitArr[1].Split(_delimeter);
                                 if(temp.Length > 1)
                                 {
                                     AppWindowHeight =  Int32.TryParse(temp[0], out int height) ? height : 400;
                                     AppWindowWidth = Int32.TryParse(temp[1], out int width) ? width : 400;
                                 }
                             }
-                            if(split_arr[0] == _appGeometry)
+                            if(splitArr[0] == _appGeometry)
                             {
-                                string[] temp = split_arr[1].Split(_delimeter);
+                                string[] temp = splitArr[1].Split(_delimeter);
                                 if (temp.Length > 1)
                                 {
                                     AppWindowTop = Double.TryParse(temp[0], out double top) ? top : 300;
                                     AppWindowLeft = Double.TryParse(temp[1], out double left) ? left : 300;
                                 }
                             }
-                            if (split_arr[0] == _redactorGeometry)
+                            if (splitArr[0] == _redactorGeometry)
                             {
-                                string[] temp = split_arr[1].Split(_delimeter);
+                                string[] temp = splitArr[1].Split(_delimeter);
                                 if (temp.Length > 1)
                                 {
                                     RedactorWindowTop = Double.TryParse(temp[0], out double top) ? top : 300;
