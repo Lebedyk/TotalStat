@@ -99,15 +99,19 @@ namespace TotalStat
                     {
                         double temporaryBeta = SelectFirstStockScreens[i].NitePercent / SelectSecondStockScreens[i].NitePercent;
                         dirtyBetaList.Add(temporaryBeta);
-                        if((SelectSecondStockScreens[i].NitePercent > 0.35) || (SelectSecondStockScreens[i].NitePercent < -0.35))
+                        if((SelectSecondStockScreens[i].NitePercent > 0.4) || (SelectSecondStockScreens[i].NitePercent < -0.4))
                         {
                             hvBetaList.Add(temporaryBeta);
                         }
                     }
-                    else if ((SelectFirstStockScreens[i].NitePercent == 0) || (SelectSecondStockScreens[i].NitePercent == 0))
+                    else if (SelectFirstStockScreens[i].NitePercent == 0)
                     {
-                        dirtyBetaList.Add(1);
+                        dirtyBetaList.Add(0);
                     }
+                    else if (SelectSecondStockScreens[i].NitePercent == 0)
+                    {
+                        dirtyBetaList.Add(1);                  
+                    }                    
                     else
                     {
                         dirtyBetaList.Add(0);
