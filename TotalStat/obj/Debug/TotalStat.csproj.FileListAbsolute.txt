@@ -1,5 +1,4 @@
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.csprojAssemblyReference.cache
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\MainWindow.g.cs
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\App.g.cs
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat_MarkupCompile.cache
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat_MarkupCompile.lref
@@ -10,17 +9,12 @@ D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\EntityFramework.dll
 D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\EntityFramework.SqlServer.dll
 D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\EntityFramework.xml
 D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\EntityFramework.SqlServer.xml
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\MainWindow.baml
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.g.resources
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.Properties.Resources.resources
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.csproj.GenerateResource.cache
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.csproj.CopyComplete
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.exe
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\TotalStat.pdb
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\RedactorWindow.g.cs
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\RedactorWindow.baml
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\AppWindow.g.cs
-D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\AppWindow.baml
 D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\GeneratedInternalTypeHelper.g.cs
 D:\MVSProjects\TotalStat\TotalStat\bin\Debug\TotalStat.exe.config
 D:\MVSProjects\TotalStat\TotalStat\bin\Debug\TotalStat.exe
@@ -47,3 +41,9 @@ D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.csproj.CopyComplete
 D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.exe
 D:\MVSProjects\TotalStat\TotalStat\obj\Debug\TotalStat.pdb
 D:\Projects\MVS\TotalStat\TotalStat\bin\Debug\FAQ.docx
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\AppWindow.g.cs
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\MainWindow.g.cs
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\RedactorWindow.g.cs
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\AppWindow.baml
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\MainWindow.baml
+D:\Projects\MVS\TotalStat\TotalStat\obj\Debug\Views\RedactorWindow.baml

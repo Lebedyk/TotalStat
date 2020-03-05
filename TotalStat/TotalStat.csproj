@@ -106,42 +106,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppSizeGeometry.cs" />
-    <Compile Include="AppWindowViewModel.cs" />
-    <Compile Include="ConnectionSet.cs" />
-    <Compile Include="DayShiftValidator.cs" />
-    <Compile Include="DBManager.cs" />
-    <Compile Include="FileManager.cs" />
-    <Compile Include="Localize.cs" />
-    <Compile Include="AppWindow.xaml.cs">
+    <Compile Include="Helpers\AppSizeGeometry.cs" />
+    <Compile Include="ViewModels\AppWindowViewModel.cs" />
+    <Compile Include="Helpers\ConnectionSet.cs" />
+    <Compile Include="Helpers\DayShiftValidator.cs" />
+    <Compile Include="Helpers\DBManager.cs" />
+    <Compile Include="Helpers\FileManager.cs" />
+    <Compile Include="Helpers\Localize.cs" />
+    <Compile Include="Views\AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Business.cs" />
-    <Compile Include="BusinessContext.cs" />
-    <Compile Include="Converters.cs" />
-    <Compile Include="DescriptionContext.cs" />
-    <Compile Include="Dividend.cs" />
-    <Compile Include="DividendContext.cs" />
-    <Compile Include="Link.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="RedactorWindow.xaml.cs">
+    <Compile Include="Models\Business.cs" />
+    <Compile Include="Models\BusinessContext.cs" />
+    <Compile Include="Helpers\Converters.cs" />
+    <Compile Include="Models\DescriptionContext.cs" />
+    <Compile Include="Models\Dividend.cs" />
+    <Compile Include="Models\DividendContext.cs" />
+    <Compile Include="Helpers\Link.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Helpers\Parser.cs" />
+    <Compile Include="Views\RedactorWindow.xaml.cs">
       <DependentUpon>RedactorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RedactorWIndowViewModel.cs" />
-    <Compile Include="Report.cs" />
-    <Compile Include="ReportContext.cs" />
-    <Compile Include="Screen.cs" />
-    <Compile Include="ScreenContext.cs" />
-    <Compile Include="Sector.cs" />
-    <Compile Include="SectorContext.cs" />
-    <Compile Include="WindowCommands.cs" />
-    <Compile Include="DataMath.cs" />
-    <Page Include="AppWindow.xaml">
+    <Compile Include="ViewModels\RedactorWIndowViewModel.cs" />
+    <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\ReportContext.cs" />
+    <Compile Include="Models\Screen.cs" />
+    <Compile Include="Models\ScreenContext.cs" />
+    <Compile Include="Models\Sector.cs" />
+    <Compile Include="Models\SectorContext.cs" />
+    <Compile Include="Helpers\WindowCommands.cs" />
+    <Compile Include="Helpers\DataMath.cs" />
+    <Page Include="Views\AppWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -149,12 +149,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Description.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Models\Description.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RedactorWindow.xaml">
+    <Page Include="Views\RedactorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
